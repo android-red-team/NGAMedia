@@ -10,7 +10,8 @@
         android:id="@+id/menu_item_search"
         android:title="@string/search"
         android:icon="@drawable/search_icon"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom"
+        app:actionViewClass="android.widget.SearchView"/>
     <item
         android:id="@+id/menu_item_movie"
         android:title="@string/search"

@@ -17,9 +17,4 @@
         android:icon="@drawable/share_icon"
         app:showAsAction="ifRoom"
         android:actionProviderClass="android.widget.ShareActionProvider" />
-    <item
-        android:id="@+id/menu_item_search"
-        android:title="@string/search"
-        android:icon="@drawable/search_icon"
-        app:showAsAction="ifRoom"/>
 </menu>

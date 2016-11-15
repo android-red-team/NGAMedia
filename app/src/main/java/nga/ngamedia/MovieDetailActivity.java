@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +28,8 @@ public class MovieDetailActivity extends AppCompatActivity {
     TextView title;
     TextView description;
     TextView voteAverage;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +52,14 @@ public class MovieDetailActivity extends AppCompatActivity {
         poster = (ImageView) findViewById(R.id.movie_poster);
         voteAverage = (TextView) findViewById(R.id.vote_average);
 
-        title.setText(mMovie.getTitle());
+        // Movies contain a 'title' while TVShows contain a 'name'
+        if(mMovie.getTitle() != null) {
+            setTitle(mMovie.getTitle());
+            title.setText(mMovie.getTitle());
+        } else {
+            setTitle(mMovie.getName());
+            title.setText(mMovie.getName());
+        }
         description.setText(mMovie.getDescription());
         voteAverage.setText("Average Rating: " + Double.toString(mMovie.getVoteAverage()));
         Picasso.with(this)
@@ -56,6 +68,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         Picasso.with(this)
                 .load(mMovie.getBackdrop())
                 .into(backdrop);
+
     }
 
     @Override
@@ -101,6 +114,12 @@ public class MovieDetailActivity extends AppCompatActivity {
             Intent searchIntent = new Intent();
             return true;
         }
+        if (id == R.id.menu_item_favorite) {
+            Intent intent = new Intent(getApplicationContext(), FavViewActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getApplicationContext().startActivity(intent);
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -108,7 +127,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     // Call to set up the intent to share
     private void setSendIntent(Intent sendIntent) {
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "I found this movie on NGAMedia");
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
     }
@@ -118,4 +137,6 @@ public class MovieDetailActivity extends AppCompatActivity {
             mShareActionProvider.setShareIntent(shareIntent);
         }
     }
+
+
 }
