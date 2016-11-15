@@ -34,7 +34,12 @@
         </activity>
         <activity
             android:name=".AboutUs"
-            android:label="@string/title_activity_movie_detail"
+            android:label="AboutUs"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".FavViewActivity"
+            android:label="@string/title_fav"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>
