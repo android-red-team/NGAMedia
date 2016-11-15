@@ -1,5 +1,6 @@
 package nga.ngamedia;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SearchView;
 
 import com.squareup.picasso.Picasso;
 
@@ -33,10 +35,9 @@ import retrofit.client.Response;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private ShareActionProvider mShareActionProvider;
-    private RecyclerView mRecyclerView;
-    private MoviesAdapter mAdapter;
-    private RecyclerView mRecyclerView2;
-    private MoviesAdapter mAdapter2;
+    private MoviesAdapter mMovieAdapter;
+    private MoviesAdapter mTVShowAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,17 +63,15 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        RecyclerView mMovieRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mMovieRecyclerView.setLayoutManager(new LinearLayoutManager(this, 0, false));
+        mMovieAdapter = new MoviesAdapter(this);
+        mMovieRecyclerView.setAdapter(mMovieAdapter);
 
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, 0, false));
-        mAdapter = new MoviesAdapter(this);
-        mRecyclerView.setAdapter(mAdapter);
-
-        mRecyclerView2 = (RecyclerView) findViewById(R.id.recyclerView2);
-        mRecyclerView2.setLayoutManager(new LinearLayoutManager(this, 0, false));
-        mAdapter2 = new MoviesAdapter(this);
-        mRecyclerView2.setAdapter(mAdapter2);
+        RecyclerView mTVShowRecyclerView = (RecyclerView) findViewById(R.id.recyclerView2);
+        mTVShowRecyclerView.setLayoutManager(new LinearLayoutManager(this, 0, false));
+        mTVShowAdapter = new MoviesAdapter(this);
+        mTVShowRecyclerView.setAdapter(mTVShowAdapter);
 
         getPopularMedia();
 
@@ -92,6 +91,15 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.menu_item_search).getActionView();
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(true); // Do iconify the widget; do not expand it by default, toggle with setIconified()
+        searchView.setSubmitButtonEnabled(true); //add a "submit" button
+
         return true;
     }
 
@@ -107,27 +115,6 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
 
-        if (id == R.id.menu_item_search) {
-            Intent movieActivityIntent = new Intent(this, MovieSubActivity.class);
-            movieActivityIntent.putExtra("EXTRA_CLASS","Search");
-            startActivity(movieActivityIntent);
-            return true;
-        }
-
-        if (id == R.id.menu_item_movie) {
-            Intent movieActivityIntent = new Intent(this, MovieSubActivity.class);
-            movieActivityIntent.putExtra("EXTRA_CLASS","Movie");
-            startActivity(movieActivityIntent);
-            return true;
-        }
-
-        if (id == R.id.menu_item_tv) {
-            Intent movieActivityIntent = new Intent(this, MovieSubActivity.class);
-            movieActivityIntent.putExtra("EXTRA_CLASS","Television");
-            startActivity(movieActivityIntent);
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -135,32 +122,26 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        //int id = item.getItemId();
-
         switch(item.getItemId()){
             case R.id.nav_home:
                 Intent homeActivityIntent = new Intent(this, MainActivity.class);
                 //movieActivityIntent.putExtra("EXTRA_CLASS","Movie");
+                finish();
                 startActivity(homeActivityIntent);
-                // return true;
                 break;
             case R.id.nav_television:
                 Intent televisionActivityIntent = new Intent(this, MovieSubActivity.class);
-                televisionActivityIntent.putExtra("EXTRA_CLASS","Television");
+                televisionActivityIntent.putExtra("EXTRA_CLASS","TVShows");
                 startActivity(televisionActivityIntent);
-                //return true;
                 break;
             case R.id.nav_movie:
                 Intent movieActivityIntent = new Intent(this, MovieSubActivity.class);
-                movieActivityIntent.putExtra("EXTRA_CLASS","Movie");
+                movieActivityIntent.putExtra("EXTRA_CLASS","Movies");
                 startActivity(movieActivityIntent);
-                //return true;
                 break;
             case R.id.nav_aboutus:
                 Intent aboutusActivityIntent = new Intent(this, AboutUs.class);
-               // aboutusActivityIntent.putExtra("EXTRA_CLASS","Movie");
                 startActivity(aboutusActivityIntent);
-                //return true;
                 break;
             case R.id.nav_share:
                 Intent sendIntent = new Intent();
@@ -173,14 +154,8 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             default:
-                Intent defaultActivityIntent = new Intent(this, MainActivity.class);
-                //movieActivityIntent.putExtra("EXTRA_CLASS","Movie");
-                startActivity(defaultActivityIntent);
-                // return true;
 
         }
-
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -202,7 +177,7 @@ public class MainActivity extends AppCompatActivity
         service.getPopularMovies(new Callback<Movie.MovieResult>() {
             @Override
             public void success(Movie.MovieResult movieResult, Response response) {
-                mAdapter.setMovieList(movieResult.getResults());
+                mMovieAdapter.setMovieList(movieResult.getResults());
             }
 
             @Override
@@ -214,7 +189,7 @@ public class MainActivity extends AppCompatActivity
         service.getPopularTV(new Callback<Movie.MovieResult>() {
             @Override
             public void success(Movie.MovieResult movieResult, Response response) {
-                mAdapter2.setMovieList(movieResult.getResults());
+                mTVShowAdapter.setMovieList(movieResult.getResults());
             }
 
             @Override
@@ -281,7 +256,7 @@ public class MainActivity extends AppCompatActivity
     // Call to set up the intent to share
     private void setSendIntent(Intent sendIntent) {
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "I found this movie on NGAMedia");
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
     }

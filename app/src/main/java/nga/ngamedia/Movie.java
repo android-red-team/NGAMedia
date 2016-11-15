@@ -11,7 +11,8 @@ import java.util.List;
  * Created by jose on 10/6/15.
  */
 public class Movie implements Parcelable {
-    private String title;
+    private String title; // used by movies
+    private String name; // used by TVShows
     @SerializedName("poster_path")
     private String poster;
     @SerializedName("overview")
@@ -25,6 +26,7 @@ public class Movie implements Parcelable {
 
     protected Movie(Parcel in) {
         title = in.readString();
+        name = in.readString();
         poster = in.readString();
         description = in.readString();
         backdrop = in.readString();
@@ -49,6 +51,14 @@ public class Movie implements Parcelable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPoster() {
@@ -86,11 +96,14 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(title);
-        parcel.writeString(poster);
-        parcel.writeString(description);
-        parcel.writeString(backdrop);
-        parcel.writeDouble(voteAverage);
+            parcel.writeString(title);
+            parcel.writeString(name);
+            parcel.writeString(poster);
+            parcel.writeString(description);
+            parcel.writeString(backdrop);
+        if (voteAverage != null) {
+            parcel.writeDouble(voteAverage);
+        }
     }
 
     public static class MovieResult {
