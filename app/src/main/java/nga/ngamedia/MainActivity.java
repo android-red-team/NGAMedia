@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_favorite:
                 // add auth condition
-                if(true){
+                if(false){
                     //navIntent = new Intent(this, FavorityActivity.class);
                     //startActivity(navIntent);
                 }
@@ -153,12 +153,14 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case R.id.nav_user:
-                if(true){
+                boolean login = false;
+                if(login){
                     // Signout or user profile.
-                    // MenuItem uname = (MenuItem) findViewById(R.id.nav_user);
-                    // uname.setTitle(username);
+                    //
                 }
                 else {
+                    //MenuItem uname = (MenuItem) findViewById(R.id.nav_user);
+                    //uname.setTitle(R.string.action_sign_in);
                     Intent navIntent = new Intent(this, LoginActivity.class);
                     startActivity(navIntent);
                 }

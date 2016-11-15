@@ -32,7 +32,8 @@
                 android:title="Share" />
             <item
                 android:id="@+id/nav_user"
-                android:icon="@drawable/logout_icon" />
+                android:icon="@drawable/logout_icon"
+                android:title="@string/action_sign_in"/>
         </menu>
     </item>
 
