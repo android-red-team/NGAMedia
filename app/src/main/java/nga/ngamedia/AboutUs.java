@@ -80,9 +80,7 @@ public class AboutUs extends AppCompatActivity
                 setShareIntent(sendIntent);
                 //return true;
                 break;
-            case R.id.nav_logout:
 
-                break;
 
             default:
                 Intent defaultActivityIntent = new Intent(this, MainActivity.class);

@@ -45,15 +45,6 @@ public class MovieSubActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -171,12 +162,29 @@ public class MovieSubActivity extends AppCompatActivity
                 setShareIntent(sendIntent);
                 //return true;
                 break;
-            case R.id.nav_logout:
-
+            case R.id.nav_favorite:
+                // add auth condition
+                if(true){
+                    //navIntent = new Intent(this, FavorityActivity.class);
+                    //startActivity(navIntent);
+                }
+                else {
+                    Intent navIntent = new Intent(this, LoginActivity.class);
+                    startActivity(navIntent);
+                }
                 break;
-
+            case R.id.nav_user:
+                if(true){
+                    // Signout or user profile.
+                    // MenuItem uname = (MenuItem) findViewById(R.id.nav_user);
+                    // uname.setTitle(username);
+                }
+                else {
+                    Intent navIntent = new Intent(this, LoginActivity.class);
+                    startActivity(navIntent);
+                }
+                break;
             default:
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
