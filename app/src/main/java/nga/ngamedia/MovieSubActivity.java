@@ -24,10 +24,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import nga.ngamedia.Movie;
-import nga.ngamedia.MovieDetailActivity;
-import nga.ngamedia.R;
-import nga.ngamedia.TMDBApiService;import nga.ngamedia.R;
 import retrofit.Callback;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
@@ -112,44 +108,56 @@ public class MovieSubActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        Intent navIntent;
         switch(item.getItemId()) {
             case R.id.nav_home:
-                Intent homeActivityIntent = new Intent(this, MainActivity.class);
+                navIntent = new Intent(this, MainActivity.class);
                 //movieActivityIntent.putExtra("EXTRA_CLASS","Movie");
-                startActivity(homeActivityIntent);
+                startActivity(navIntent);
                 // return true;
                 break;
             case R.id.nav_television:
-                Intent televisionActivityIntent = new Intent(this, MovieSubActivity.class);
-                televisionActivityIntent.putExtra("EXTRA_CLASS", "Television");
-                startActivity(televisionActivityIntent);
+                navIntent = new Intent(this, MovieSubActivity.class);
+                navIntent.putExtra("EXTRA_CLASS", "Television");
+                startActivity(navIntent);
                 //return true;
                 break;
             case R.id.nav_movie:
-                Intent movieActivityIntent = new Intent(this, MovieSubActivity.class);
-                movieActivityIntent.putExtra("EXTRA_CLASS", "Movie");
-                startActivity(movieActivityIntent);
+                navIntent = new Intent(this, MovieSubActivity.class);
+                navIntent.putExtra("EXTRA_CLASS", "Movie");
+                startActivity(navIntent);
                 //return true;
                 break;
             case R.id.nav_aboutus:
-                Intent aboutusActivityIntent = new Intent(this, AboutUs.class);
+                navIntent = new Intent(this, AboutUs.class);
                 // aboutusActivityIntent.putExtra("EXTRA_CLASS","Movie");
-                startActivity(aboutusActivityIntent);
+                startActivity(navIntent);
                 //return true;
                 break;
             case R.id.nav_share:
-                Intent sendIntent = new Intent();
-                setSendIntent(sendIntent);
-                setShareIntent(sendIntent);
+                navIntent = new Intent();
+                setSendIntent(navIntent);
+                setShareIntent(navIntent);
                 break;
-            case R.id.nav_logout:
-
+            case R.id.nav_user:
+                navIntent = new Intent(this, LoginActivity.class);
+                startActivity(navIntent);
                 break;
-
+            case R.id.nav_favorite:
+                // add auth condition
+                if(true){
+                    //navIntent = new Intent(this, FavorityActivity.class);
+                    //startActivity(navIntent);
+                }
+                else {
+                    navIntent = new Intent(this, LoginActivity.class);
+                    startActivity(navIntent);
+                }
+                break;
             default:
-                Intent defaultActivityIntent = new Intent(this, MainActivity.class);
+                navIntent = new Intent(this, MainActivity.class);
                 //movieActivityIntent.putExtra("EXTRA_CLASS","Movie");
-                startActivity(defaultActivityIntent);
+                startActivity(navIntent);
                 // return true;
         }
 

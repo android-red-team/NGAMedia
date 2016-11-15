@@ -44,15 +44,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -101,34 +92,30 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        Intent movieActivityIntent;
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch(id){
+            case R.id.action_settings:
+                return true;
+            case R.id.menu_item_search:
+                movieActivityIntent = new Intent(this, MovieSubActivity.class);
+                movieActivityIntent.putExtra("EXTRA_CLASS","Search");
+                startActivity(movieActivityIntent);
+                return true;
+            case R.id.menu_item_movie:
+                movieActivityIntent = new Intent(this, MovieSubActivity.class);
+                movieActivityIntent.putExtra("EXTRA_CLASS","Movie");
+                startActivity(movieActivityIntent);
+                return true;
+            case R.id.menu_item_tv:
+                movieActivityIntent = new Intent(this, MovieSubActivity.class);
+                movieActivityIntent.putExtra("EXTRA_CLASS","Television");
+                startActivity(movieActivityIntent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        if (id == R.id.menu_item_search) {
-            Intent movieActivityIntent = new Intent(this, MovieSubActivity.class);
-            movieActivityIntent.putExtra("EXTRA_CLASS","Search");
-            startActivity(movieActivityIntent);
-            return true;
-        }
-
-        if (id == R.id.menu_item_movie) {
-            Intent movieActivityIntent = new Intent(this, MovieSubActivity.class);
-            movieActivityIntent.putExtra("EXTRA_CLASS","Movie");
-            startActivity(movieActivityIntent);
-            return true;
-        }
-
-        if (id == R.id.menu_item_tv) {
-            Intent movieActivityIntent = new Intent(this, MovieSubActivity.class);
-            movieActivityIntent.putExtra("EXTRA_CLASS","Television");
-            startActivity(movieActivityIntent);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -136,46 +123,57 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         //int id = item.getItemId();
-
+        Intent navIntent;
         switch(item.getItemId()){
             case R.id.nav_home:
-                Intent homeActivityIntent = new Intent(this, MainActivity.class);
+                navIntent = new Intent(this, MainActivity.class);
                 //movieActivityIntent.putExtra("EXTRA_CLASS","Movie");
-                startActivity(homeActivityIntent);
+                startActivity(navIntent);
                 // return true;
                 break;
             case R.id.nav_television:
-                Intent televisionActivityIntent = new Intent(this, MovieSubActivity.class);
-                televisionActivityIntent.putExtra("EXTRA_CLASS","Television");
-                startActivity(televisionActivityIntent);
+                navIntent = new Intent(this, MovieSubActivity.class);
+                navIntent.putExtra("EXTRA_CLASS","Television");
+                startActivity(navIntent);
                 //return true;
                 break;
             case R.id.nav_movie:
-                Intent movieActivityIntent = new Intent(this, MovieSubActivity.class);
-                movieActivityIntent.putExtra("EXTRA_CLASS","Movie");
-                startActivity(movieActivityIntent);
+                navIntent = new Intent(this, MovieSubActivity.class);
+                navIntent.putExtra("EXTRA_CLASS","Movie");
+                startActivity(navIntent);
                 //return true;
                 break;
             case R.id.nav_aboutus:
-                Intent aboutusActivityIntent = new Intent(this, AboutUs.class);
+                navIntent = new Intent(this, AboutUs.class);
                // aboutusActivityIntent.putExtra("EXTRA_CLASS","Movie");
-                startActivity(aboutusActivityIntent);
+                startActivity(navIntent);
                 //return true;
                 break;
             case R.id.nav_share:
-                Intent sendIntent = new Intent();
-                setSendIntent(sendIntent);
-                setShareIntent(sendIntent);
+                navIntent = new Intent();
+                setSendIntent(navIntent);
+                setShareIntent(navIntent);
                 //return true;
                 break;
-            case R.id.nav_logout:
-
+            case R.id.nav_user:
+                navIntent = new Intent(this, LoginActivity.class);
+                startActivity(navIntent);
                 break;
-
+            case R.id.nav_favorite:
+                // add auth condition
+                if(true){
+                    //navIntent = new Intent(this, FavoriteActivity.class);
+                    //startActivity(navIntent);
+                }
+                else {
+                    navIntent = new Intent(this, LoginActivity.class);
+                    startActivity(navIntent);
+                }
+                break;
             default:
-                Intent defaultActivityIntent = new Intent(this, MainActivity.class);
+                navIntent = new Intent(this, MainActivity.class);
                 //movieActivityIntent.putExtra("EXTRA_CLASS","Movie");
-                startActivity(defaultActivityIntent);
+                startActivity(navIntent);
                 // return true;
 
         }
