@@ -23,12 +23,13 @@
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:src="@drawable/logo_icon"
         android:layout_marginTop="30dp"
         android:layout_below="@+id/text_view2"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:scaleType="fitXY"/>
 
     <TextView
         android:text="Created by CST BCIT student."
