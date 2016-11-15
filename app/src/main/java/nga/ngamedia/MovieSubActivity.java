@@ -1,5 +1,6 @@
 package nga.ngamedia;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,16 +19,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SearchView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import nga.ngamedia.Movie;
-import nga.ngamedia.MovieDetailActivity;
-import nga.ngamedia.R;
-import nga.ngamedia.TMDBApiService;import nga.ngamedia.R;
 import retrofit.Callback;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
@@ -37,8 +35,9 @@ import retrofit.client.Response;
 public class MovieSubActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private ShareActionProvider mShareActionProvider;
-    private RecyclerView mRecyclerView;
     private MoviesAdapter mAdapter;
+    private SearchView searchView;
+    private MenuItem searchMenuItem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,16 +63,37 @@ public class MovieSubActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         mAdapter = new MoviesAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
-        Intent intent = getIntent();
-        // Code and query
-        getMedia(1, null);
 
+        // Get the intent, verify the action and get the query
+        handleIntent(getIntent());
+    }
+
+    // If a user start a new search from within your search activity, Android would recycle the instance
+    public void onNewIntent(Intent intent) {
+        setIntent(intent);
+        handleIntent(intent);
+    }
+
+    // Handles incoming intent/s including search queries
+    private void handleIntent(Intent intent) {
+        // Get the intent, verify the action and get the query
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            getMedia(1, query);
+        } else {
+            // Code and null (no query)
+            Intent myIntent = getIntent();
+            setTitle(myIntent.getStringExtra("EXTRA_CLASS"));
+            if(myIntent.getStringExtra("EXTRA_CLASS").equals("Movies")) {
+                getMedia(1, null);
+            } else if (myIntent.getStringExtra("EXTRA_CLASS").equals("TVShows")) {
+                getMedia(5, null);
+            }
+        }
     }
 
     @Override
@@ -90,6 +110,15 @@ public class MovieSubActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.menu_item_search).getActionView();
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(true); // Do iconify the widget; do not expand it by default, toggle with setIconified()
+        searchView.setSubmitButtonEnabled(true); //add a "submit" button
+
         return true;
     }
 
@@ -112,53 +141,55 @@ public class MovieSubActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        switch(item.getItemId()) {
+        switch(item.getItemId()){
             case R.id.nav_home:
                 Intent homeActivityIntent = new Intent(this, MainActivity.class);
                 //movieActivityIntent.putExtra("EXTRA_CLASS","Movie");
+                finish();
                 startActivity(homeActivityIntent);
-                // return true;
                 break;
             case R.id.nav_television:
                 Intent televisionActivityIntent = new Intent(this, MovieSubActivity.class);
-                televisionActivityIntent.putExtra("EXTRA_CLASS", "Television");
+                televisionActivityIntent.putExtra("EXTRA_CLASS","TVShows");
+                finish();
                 startActivity(televisionActivityIntent);
-                //return true;
                 break;
             case R.id.nav_movie:
                 Intent movieActivityIntent = new Intent(this, MovieSubActivity.class);
-                movieActivityIntent.putExtra("EXTRA_CLASS", "Movie");
+                movieActivityIntent.putExtra("EXTRA_CLASS","Movies");
+                finish();
                 startActivity(movieActivityIntent);
-                //return true;
                 break;
             case R.id.nav_aboutus:
                 Intent aboutusActivityIntent = new Intent(this, AboutUs.class);
-                // aboutusActivityIntent.putExtra("EXTRA_CLASS","Movie");
                 startActivity(aboutusActivityIntent);
-                //return true;
                 break;
             case R.id.nav_share:
                 Intent sendIntent = new Intent();
                 setSendIntent(sendIntent);
                 setShareIntent(sendIntent);
+                //return true;
                 break;
             case R.id.nav_logout:
 
                 break;
 
             default:
-                Intent defaultActivityIntent = new Intent(this, MainActivity.class);
-                //movieActivityIntent.putExtra("EXTRA_CLASS","Movie");
-                startActivity(defaultActivityIntent);
-                // return true;
+
         }
 
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    // Determines the API call to make
     private void getMedia(int code, String query) {
+        // If a query parameter is passed, automatically make it a search-based API call
+        if(query != null && query.length() > 2) {
+            code = 4;
+        }
+        // Initialize service
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint("http://api.themoviedb.org/3")
                 .setRequestInterceptor(new RequestInterceptor() {
@@ -206,7 +237,71 @@ public class MovieSubActivity extends AppCompatActivity
 
             // best movies
             case (3): {
-                service.getBestMovies(new Callback<Movie.MovieResult>() {
+                service.getPopularTV(new Callback<Movie.MovieResult>() {
+                    @Override
+                    public void success(Movie.MovieResult movieResult, Response response) {
+                        mAdapter.setMovieList(movieResult.getResults());
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        error.printStackTrace();
+                    }
+                });
+                break;
+            }
+
+            // search results
+            case (4): {
+                service.getSearchResults(query, new Callback<Movie.MovieResult>() {
+                    @Override
+                    public void success(Movie.MovieResult movieResult, Response response) {
+                        mAdapter.setMovieList(movieResult.getResults());
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        error.printStackTrace();
+                    }
+                });
+                break;
+            }
+
+            //popular television
+            case (5): {
+                service.getPopularTV(new Callback<Movie.MovieResult>() {
+                    @Override
+                    public void success(Movie.MovieResult movieResult, Response response) {
+                        mAdapter.setMovieList(movieResult.getResults());
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        error.printStackTrace();
+                    }
+                });
+                break;
+            }
+
+            // recent television
+            case (6): {
+                service.getRecentTV(new Callback<Movie.MovieResult>() {
+                    @Override
+                    public void success(Movie.MovieResult movieResult, Response response) {
+                        mAdapter.setMovieList(movieResult.getResults());
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        error.printStackTrace();
+                    }
+                });
+                break;
+            }
+
+            // best television
+            case (7): {
+                service.getBestTV(new Callback<Movie.MovieResult>() {
                     @Override
                     public void success(Movie.MovieResult movieResult, Response response) {
                         mAdapter.setMovieList(movieResult.getResults());
@@ -260,10 +355,17 @@ public class MovieSubActivity extends AppCompatActivity
         @Override
         public void onBindViewHolder(MovieViewHolder holder, int position) {
             Movie movie = mMovieList.get(position);
-            Picasso.with(mContext)
-                    .load(movie.getPoster())
-                    .placeholder(R.color.colorAccent)
-                    .into(holder.imageView);
+            if(movie.getPoster().length() > 35) {
+                Picasso.with(mContext)
+                        .load(movie.getPoster())
+                        .placeholder(R.color.colorAccent)
+                        .into(holder.imageView);
+            } else {
+                Picasso.with(mContext)
+                        .load("https://thumbs.gfycat.com/UnfoldedEmotionalEquine-size_restricted.gif")
+                        .placeholder(R.color.colorAccent)
+                        .into(holder.imageView);
+            }
         }
 
         @Override
@@ -277,13 +379,15 @@ public class MovieSubActivity extends AppCompatActivity
             notifyDataSetChanged();
         }
     }
+
     // Call to set up the intent to share
     private void setSendIntent(Intent sendIntent) {
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "I found this movie on NGAMedia");
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
     }
+
     // Call to update the share intent
     private void setShareIntent(Intent shareIntent) {
         if (mShareActionProvider != null) {

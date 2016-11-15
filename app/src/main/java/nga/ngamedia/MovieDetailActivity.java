@@ -47,7 +47,14 @@ public class MovieDetailActivity extends AppCompatActivity {
         poster = (ImageView) findViewById(R.id.movie_poster);
         voteAverage = (TextView) findViewById(R.id.vote_average);
 
-        title.setText(mMovie.getTitle());
+        // Movies contain a 'title' while TVShows contain a 'name'
+        if(mMovie.getTitle() != null) {
+            setTitle(mMovie.getTitle());
+            title.setText(mMovie.getTitle());
+        } else {
+            setTitle(mMovie.getName());
+            title.setText(mMovie.getName());
+        }
         description.setText(mMovie.getDescription());
         voteAverage.setText("Average Rating: " + Double.toString(mMovie.getVoteAverage()));
         Picasso.with(this)
@@ -108,7 +115,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     // Call to set up the intent to share
     private void setSendIntent(Intent sendIntent) {
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "I found this movie on NGAMedia");
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
     }
