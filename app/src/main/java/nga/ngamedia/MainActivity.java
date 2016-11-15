@@ -45,15 +45,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -109,6 +100,7 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        Intent movieActivityIntent;
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
@@ -149,12 +141,31 @@ public class MainActivity extends AppCompatActivity
                 setShareIntent(sendIntent);
                 //return true;
                 break;
-            case R.id.nav_logout:
-
+            case R.id.nav_favorite:
+                // add auth condition
+                if(false){
+                    //navIntent = new Intent(this, FavorityActivity.class);
+                    //startActivity(navIntent);
+                }
+                else {
+                    Intent navIntent = new Intent(this, LoginActivity.class);
+                    startActivity(navIntent);
+                }
                 break;
-
+            case R.id.nav_user:
+                boolean login = false;
+                if(login){
+                    // Signout or user profile.
+                    //
+                }
+                else {
+                    //MenuItem uname = (MenuItem) findViewById(R.id.nav_user);
+                    //uname.setTitle(R.string.action_sign_in);
+                    Intent navIntent = new Intent(this, LoginActivity.class);
+                    startActivity(navIntent);
+                }
+                break;
             default:
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
