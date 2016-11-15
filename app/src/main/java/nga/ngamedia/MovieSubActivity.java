@@ -119,18 +119,19 @@ public class MovieSubActivity extends AppCompatActivity
                 startActivity(homeActivityIntent);
                 // return true;
                 break;
-            case R.id.nav_television:
-                Intent televisionActivityIntent = new Intent(this, MovieSubActivity.class);
-                televisionActivityIntent.putExtra("EXTRA_CLASS", "Television");
-                startActivity(televisionActivityIntent);
-                //return true;
-                break;
             case R.id.nav_movie:
                 Intent movieActivityIntent = new Intent(this, MovieSubActivity.class);
                 movieActivityIntent.putExtra("EXTRA_CLASS", "Movie");
                 startActivity(movieActivityIntent);
                 //return true;
                 break;
+            case R.id.nav_television:
+                Intent televisionActivityIntent = new Intent(this, MovieSubActivity.class);
+                televisionActivityIntent.putExtra("EXTRA_CLASS", "Television");
+                startActivity(televisionActivityIntent);
+                //return true;
+                break;
+
             case R.id.nav_aboutus:
                 Intent aboutusActivityIntent = new Intent(this, AboutUs.class);
                 // aboutusActivityIntent.putExtra("EXTRA_CLASS","Movie");
