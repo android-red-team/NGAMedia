@@ -168,7 +168,7 @@ public class MovieSubActivity extends AppCompatActivity
                     //startActivity(navIntent);
                 }
                 else {
-                    Intent navIntent = new Intent(this, LoginActivity.class);
+                    Intent navIntent = new Intent(this, SigninActivity.class);
                     startActivity(navIntent);
                 }
                 break;
@@ -179,7 +179,7 @@ public class MovieSubActivity extends AppCompatActivity
                     // uname.setTitle(username);
                 }
                 else {
-                    Intent navIntent = new Intent(this, LoginActivity.class);
+                    Intent navIntent = new Intent(this, SigninActivity.class);
                     startActivity(navIntent);
                 }
                 break;
