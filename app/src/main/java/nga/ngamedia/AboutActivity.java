@@ -14,8 +14,7 @@ import android.view.MenuItem;
 /**
  * Created by kwanc on 2016-11-03.
  */
-
-public class AboutUs extends AppCompatActivity
+public class AboutActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
     private ShareActionProvider mShareActionProvider;
 
@@ -69,7 +68,7 @@ public class AboutUs extends AppCompatActivity
                 //return true;
                 break;
             case R.id.nav_aboutus:
-                Intent aboutusActivityIntent = new Intent(this, AboutUs.class);
+                Intent aboutusActivityIntent = new Intent(this, AboutActivity.class);
                 // aboutusActivityIntent.putExtra("EXTRA_CLASS","Movie");
                 startActivity(aboutusActivityIntent);
                 //return true;

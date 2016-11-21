@@ -2,12 +2,18 @@ package nga.ngamedia;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -36,12 +43,19 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private ShareActionProvider mShareActionProvider;
     private MoviesAdapter mMovieAdapter;
+    private MoviesAdapter mMovieAdapter2;
     private MoviesAdapter mTVShowAdapter;
+    // The BroadcastReceiver that tracks network connectivity changes.
+    private NetworkReceiver networkReceiver = new NetworkReceiver();
+    private Snackbar networkNotificationSnackBar;
+    private static MainActivity mainActivityInstance;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mainActivityInstance = this;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -66,8 +80,33 @@ public class MainActivity extends AppCompatActivity
         mTVShowAdapter = new MoviesAdapter(this);
         mTVShowRecyclerView.setAdapter(mTVShowAdapter);
 
-        getPopularMedia();
+        RecyclerView mMovieRecyclerView2 = (RecyclerView) findViewById(R.id.recyclerView3);
+        mMovieRecyclerView2.setLayoutManager(new LinearLayoutManager(this, 0, false));
+        mMovieAdapter2 = new MoviesAdapter(this);
+        mMovieRecyclerView2.setAdapter(mMovieAdapter2);
 
+        loadMedia();
+
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Registers BroadcastReceiver to track network connection changes.
+        IntentFilter networkStatusFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        networkReceiver = new NetworkReceiver();
+        this.registerReceiver(networkReceiver, networkStatusFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Unregisters BroadcastReceiver when app is paused.
+        if (networkReceiver != null) {
+            this.unregisterReceiver(networkReceiver);
+        }
+        if(networkNotificationSnackBar != null && networkNotificationSnackBar.isShown()) {
+            networkNotificationSnackBar.dismiss();
+        }
     }
 
     @Override
@@ -76,7 +115,21 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            //super.onBackPressed();
+            new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setTitle("Quit Application")
+                    .setMessage("Are you sure you want to close NGAMedia app?")
+                    .setIcon(R.drawable.movie_icon)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(Intent.ACTION_MAIN);
+                            intent.addCategory(Intent.CATEGORY_HOME);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
+                            startActivity(intent);
+                            finish();
+                            System.exit(0);;
+                        }
+                    }).setNegativeButton("No", null).show();
         }
     }
 
@@ -119,7 +172,7 @@ public class MainActivity extends AppCompatActivity
         switch(item.getItemId()){
             case R.id.nav_home:
                 Intent homeActivityIntent = new Intent(this, MainActivity.class);
-                //movieActivityIntent.putExtra("EXTRA_CLASS","Movie");
+                homeActivityIntent.putExtra("EXTRA_CLASS","Movie");
                 finish();
                 startActivity(homeActivityIntent);
                 break;
@@ -135,7 +188,7 @@ public class MainActivity extends AppCompatActivity
                 //return true;
                 break;
             case R.id.nav_aboutus:
-                Intent aboutusActivityIntent = new Intent(this, AboutUs.class);
+                Intent aboutusActivityIntent = new Intent(this, AboutActivity.class);
                 startActivity(aboutusActivityIntent);
                 break;
             case R.id.nav_share:
@@ -176,7 +229,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void getPopularMedia() {
+    private void loadMedia() {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint("http://api.themoviedb.org/3")
                 .setRequestInterceptor(new RequestInterceptor() {
@@ -204,6 +257,18 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void success(Movie.MovieResult movieResult, Response response) {
                 mTVShowAdapter.setMovieList(movieResult.getResults());
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                error.printStackTrace();
+            }
+        });
+
+        service.getRecentMovies(new Callback<Movie.MovieResult>() {
+            @Override
+            public void success(Movie.MovieResult movieResult, Response response) {
+                mMovieAdapter2.setMovieList(movieResult.getResults());
             }
 
             @Override
@@ -267,6 +332,47 @@ public class MainActivity extends AppCompatActivity
             notifyDataSetChanged();
         }
     }
+
+    // Returns an instance of the current Main Activity running
+    public static MainActivity  getMainActivityInstance(){
+        return mainActivityInstance;
+    }
+
+    // Update
+    public void updateMainActivityUI(final Boolean... params) {
+        MainActivity.this.runOnUiThread(new Runnable() {
+            public void run() {
+                // Initialize UI resources to be updated
+                TextView popularMovieHeaderTV = (TextView) findViewById(R.id.popularMovieHeader);
+                String popular_movies_header = getString(R.string.popular_movies_header);
+
+                TextView popularTVHeaderTV = (TextView) findViewById(R.id.popularTVHeader);
+                String popular_tv_shows_header = getString(R.string.popular_tv_shows_header);
+
+                TextView popularMovieHeader2TV = (TextView) findViewById(R.id.popularMovieHeader2);
+                String popular_movies_header_2 = getString(R.string.popular_movies_header_2);
+
+                // params[0] refers to whether the device is connected to the internet
+                if(params[0]) {
+                    popularMovieHeaderTV.setText(popular_movies_header);
+                    popularTVHeaderTV.setText(popular_tv_shows_header);
+                    popularMovieHeader2TV.setText(popular_movies_header_2);
+                    // Hide Snackbar
+                    if(networkNotificationSnackBar != null && networkNotificationSnackBar.isShown()) {
+                        networkNotificationSnackBar.dismiss();
+                    }
+                } else {
+                    networkNotificationSnackBar = Snackbar.make(findViewById(android.R.id.content), "App cannot function without an internet connection", Snackbar.LENGTH_INDEFINITE);
+                    networkNotificationSnackBar.getView().setBackgroundColor(Color.RED);
+                    networkNotificationSnackBar.show();
+                    popularMovieHeaderTV.setText(" ");
+                    popularTVHeaderTV.setText(" ");
+                    popularMovieHeader2TV.setText(" ");
+                }
+            }
+        });
+    }
+
     // Call to set up the intent to share
     private void setSendIntent(Intent sendIntent) {
         sendIntent.setAction(Intent.ACTION_SEND);

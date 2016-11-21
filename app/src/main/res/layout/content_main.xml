@@ -10,7 +10,7 @@
     tools:showIn="@layout/app_bar_main">
 
     <TextView
-        android:text="Popular Movies"
+        android:text="@string/popular_movies_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/popularMovieHeader" />
@@ -22,7 +22,7 @@
         android:layout_height="200dp" />
 
     <TextView
-        android:text="Popular TV Shows"
+        android:text="@string/popular_tv_shows_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/popularTVHeader"
@@ -33,5 +33,18 @@
         android:layout_width="wrap_content"
         android:layout_height="200dp"
         android:layout_below="@id/popularTVHeader"/>
+
+    <TextView
+        android:text="@string/popular_movies_header_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/popularMovieHeader2"
+        android:layout_below="@id/recyclerView2"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView3"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:layout_below="@id/popularMovieHeader2"/>
 
 </RelativeLayout>

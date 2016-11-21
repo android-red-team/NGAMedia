@@ -74,6 +74,7 @@ public class MovieSubActivity extends AppCompatActivity
         // Get the intent, verify the action and get the query
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
+            setTitle(query);
             getMedia(1, query);
         } else {
             // Code and null (no query)
@@ -153,7 +154,7 @@ public class MovieSubActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_aboutus:
-                Intent aboutusActivityIntent = new Intent(this, AboutUs.class);
+                Intent aboutusActivityIntent = new Intent(this, AboutActivity.class);
                 startActivity(aboutusActivityIntent);
                 break;
             case R.id.nav_share:
