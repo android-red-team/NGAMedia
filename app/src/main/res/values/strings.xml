@@ -119,4 +119,7 @@
         completions."
     </string>
     <string name="title_activity_signup">Sign up</string>
+    <string name="popular_movies_header">Popular Movies</string>
+    <string name="popular_tv_shows_header">Popular TV Shows</string>
+    <string name="popular_movies_header_2">Recent Movies</string>
 </resources>

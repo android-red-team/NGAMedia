@@ -74,6 +74,7 @@ public class MovieSubActivity extends AppCompatActivity
         // Get the intent, verify the action and get the query
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
+            setTitle(query);
             getMedia(1, query);
         } else {
             // Code and null (no query)
@@ -139,20 +140,21 @@ public class MovieSubActivity extends AppCompatActivity
                 finish();
                 startActivity(homeActivityIntent);
                 break;
-            case R.id.nav_television:
-                Intent televisionActivityIntent = new Intent(this, MovieSubActivity.class);
-                televisionActivityIntent.putExtra("EXTRA_CLASS","TVShows");
-                finish();
-                startActivity(televisionActivityIntent);
-                break;
             case R.id.nav_movie:
                 Intent movieActivityIntent = new Intent(this, MovieSubActivity.class);
                 movieActivityIntent.putExtra("EXTRA_CLASS","Movies");
                 finish();
                 startActivity(movieActivityIntent);
                 break;
+            case R.id.nav_television:
+                Intent televisionActivityIntent = new Intent(this, MovieSubActivity.class);
+                televisionActivityIntent.putExtra("EXTRA_CLASS", "Television");
+                startActivity(televisionActivityIntent);
+                //return true;
+                break;
+
             case R.id.nav_aboutus:
-                Intent aboutusActivityIntent = new Intent(this, AboutUs.class);
+                Intent aboutusActivityIntent = new Intent(this, AboutActivity.class);
                 startActivity(aboutusActivityIntent);
                 break;
             case R.id.nav_share:

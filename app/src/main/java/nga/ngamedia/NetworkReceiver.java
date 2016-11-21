@@ -1,16 +1,24 @@
 package nga.ngamedia;
 
-/**
- * Created by gerard on 2016-10-28.
- */
-
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-public class NetworkUtil {
+/**
+ * Created by gerard on 2016-11-18.
+ */
 
-    public static boolean isNetworkAvailable(Context context) {
+public class NetworkReceiver extends BroadcastReceiver {
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        // Input parameter: Boolean... params
+        MainActivity.getMainActivityInstance().updateMainActivityUI(isNetworkAvailable(context));
+    }
+
+    private boolean isNetworkAvailable(Context context) {
         int[] networkTypes = {ConnectivityManager.TYPE_MOBILE,
                 ConnectivityManager.TYPE_WIFI};
         try {
