@@ -93,9 +93,6 @@ public class MainActivity extends AppCompatActivity
         mMovieRecyclerView2.setLayoutManager(new LinearLayoutManager(this, 0, false));
         mMovieAdapter2 = new MoviesAdapter(this);
         mMovieRecyclerView2.setAdapter(mMovieAdapter2);
-
-        loadMedia();
-
     }
     @Override
     public void onResume() {
@@ -104,6 +101,22 @@ public class MainActivity extends AppCompatActivity
         IntentFilter networkStatusFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         networkReceiver = new NetworkReceiver();
         this.registerReceiver(networkReceiver, networkStatusFilter);
+
+        // Initialize UI resources to be updated
+        TextView popularMovieHeaderTV = (TextView) findViewById(R.id.popularMovieHeader);
+        String popular_movies_header = getString(R.string.popular_movies_header);
+
+        TextView popularTVHeaderTV = (TextView) findViewById(R.id.popularTVHeader);
+        String popular_tv_shows_header = getString(R.string.popular_tv_shows_header);
+
+        TextView popularMovieHeader2TV = (TextView) findViewById(R.id.popularMovieHeader2);
+        String popular_movies_header_2 = getString(R.string.popular_movies_header_2);
+        popularMovieHeaderTV.setText(" ");
+        popularTVHeaderTV.setText(" ");
+        popularMovieHeader2TV.setText(" ");
+        loadMedia();
+
+
     }
 
     @Override
@@ -383,13 +396,13 @@ public class MainActivity extends AppCompatActivity
                     if(networkNotificationSnackBar != null && networkNotificationSnackBar.isShown()) {
                         networkNotificationSnackBar.dismiss();
                     }
+                    networkNotificationSnackBar = Snackbar.make(findViewById(android.R.id.content), "Loading media...", Snackbar.LENGTH_SHORT);
+                    networkNotificationSnackBar.getView().setBackgroundColor(Color.BLUE);
+                    networkNotificationSnackBar.show();
                 } else {
-                    networkNotificationSnackBar = Snackbar.make(findViewById(android.R.id.content), "App cannot function without an internet connection", Snackbar.LENGTH_INDEFINITE);
+                    networkNotificationSnackBar = Snackbar.make(findViewById(android.R.id.content), "Warning: App cannot function without an internet connection!", Snackbar.LENGTH_INDEFINITE);
                     networkNotificationSnackBar.getView().setBackgroundColor(Color.RED);
                     networkNotificationSnackBar.show();
-                    popularMovieHeaderTV.setText(" ");
-                    popularTVHeaderTV.setText(" ");
-                    popularMovieHeader2TV.setText(" ");
                 }
             }
         });
