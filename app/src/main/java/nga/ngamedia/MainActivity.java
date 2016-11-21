@@ -172,10 +172,10 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_favorite:
                 // add auth condition
-                if(login){
-                    Intent navIntent = new Intent(this, SigninActivity.class);
-                    startActivity(navIntent);
-                }
+                if(mUser == null){
+                    // Not signed in, click redirect to sign in page
+                    Intent intent = new Intent(this, SigninActivity.class);
+                    startActivity(intent);
                 else {
                     //navIntent = new Intent(this, FavorityActivity.class);
                     //startActivity(navIntent);
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_user:
                 if(mUser == null){
-                    // Not signed in, show sign in link in nav bar
+                    // Not signed in, click redirect to sign in page
                     Intent intent = new Intent(this, SigninActivity.class);
                     startActivity(intent);
                 } else {
