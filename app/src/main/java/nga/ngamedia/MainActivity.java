@@ -28,6 +28,8 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -45,17 +47,33 @@ public class MainActivity extends AppCompatActivity
     private MoviesAdapter mMovieAdapter;
     private MoviesAdapter mMovieAdapter2;
     private MoviesAdapter mTVShowAdapter;
+<<<<<<< HEAD
+    //private String mUsername;
+    //private String mPhotoUrl;
+
+    // Firebase auth
+    private FirebaseUser mUser;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+=======
     // The BroadcastReceiver that tracks network connectivity changes.
     private NetworkReceiver networkReceiver = new NetworkReceiver();
     private Snackbar networkNotificationSnackBar;
     private static MainActivity mainActivityInstance;
 
+>>>>>>> fe55cf7fd5686c13b19fedbdd2faa69b168a1a32
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+<<<<<<< HEAD
+
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+=======
         mainActivityInstance = this;
+>>>>>>> fe55cf7fd5686c13b19fedbdd2faa69b168a1a32
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -69,6 +87,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
 
         RecyclerView mMovieRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mMovieRecyclerView.setLayoutManager(new LinearLayoutManager(this, 0, false));
@@ -133,6 +152,21 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+
+    /*
+    final MenuItem uName = (MenuItem) findViewById(R.id.nav_user);
+            mAuthListener = new FirebaseAuth.AuthStateListener() {
+                @Override
+                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                    if (mUser != null) {
+                        uName.setTitle("Sign Out");
+                    } else {
+                        uName.setTitle("Sign In");
+                    }
+                }
+            };
+
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -168,6 +202,7 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        boolean login = false;
         // Handle navigation view item clicks here.
         switch(item.getItemId()){
             case R.id.nav_home:
@@ -199,26 +234,22 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_favorite:
                 // add auth condition
-                if(false){
+                if(mUser == null){
+                    // Not signed in, click redirect to sign in page
+                    Intent intent = new Intent(this, SigninActivity.class);
+                    startActivity(intent);
+                else {
                     //navIntent = new Intent(this, FavorityActivity.class);
                     //startActivity(navIntent);
                 }
-                else {
-                    Intent navIntent = new Intent(this, LoginActivity.class);
-                    startActivity(navIntent);
-                }
                 break;
             case R.id.nav_user:
-                boolean login = false;
-                if(login){
-                    // Signout or user profile.
-                    //
-                }
-                else {
-                    //MenuItem uname = (MenuItem) findViewById(R.id.nav_user);
-                    //uname.setTitle(R.string.action_sign_in);
-                    Intent navIntent = new Intent(this, LoginActivity.class);
-                    startActivity(navIntent);
+                if(mUser == null){
+                    // Not signed in, click redirect to sign in page
+                    Intent intent = new Intent(this, SigninActivity.class);
+                    startActivity(intent);
+                } else {
+                    mAuth.signOut();
                 }
                 break;
             default:
