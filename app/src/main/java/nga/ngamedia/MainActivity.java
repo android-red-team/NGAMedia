@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setIcon(R.drawable.nga_logo);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -175,15 +176,16 @@ public class MainActivity extends AppCompatActivity
                 finish();
                 startActivity(homeActivityIntent);
                 break;
-            case R.id.nav_television:
-                Intent televisionActivityIntent = new Intent(this, MovieSubActivity.class);
-                televisionActivityIntent.putExtra("EXTRA_CLASS","TVShows");
-                startActivity(televisionActivityIntent);
-                break;
             case R.id.nav_movie:
                 Intent movieActivityIntent = new Intent(this, MovieSubActivity.class);
                 movieActivityIntent.putExtra("EXTRA_CLASS","Movies");
                 startActivity(movieActivityIntent);
+                break;
+            case R.id.nav_television:
+                Intent televisionActivityIntent = new Intent(this, MovieSubActivity.class);
+                televisionActivityIntent.putExtra("EXTRA_CLASS","Television");
+                startActivity(televisionActivityIntent);
+                //return true;
                 break;
             case R.id.nav_aboutus:
                 Intent aboutusActivityIntent = new Intent(this, AboutActivity.class);
