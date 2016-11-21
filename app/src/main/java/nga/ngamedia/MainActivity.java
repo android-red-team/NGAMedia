@@ -47,33 +47,23 @@ public class MainActivity extends AppCompatActivity
     private MoviesAdapter mMovieAdapter;
     private MoviesAdapter mMovieAdapter2;
     private MoviesAdapter mTVShowAdapter;
-<<<<<<< HEAD
-    //private String mUsername;
-    //private String mPhotoUrl;
 
     // Firebase auth
     private FirebaseUser mUser;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-=======
     // The BroadcastReceiver that tracks network connectivity changes.
     private NetworkReceiver networkReceiver = new NetworkReceiver();
     private Snackbar networkNotificationSnackBar;
     private static MainActivity mainActivityInstance;
 
->>>>>>> fe55cf7fd5686c13b19fedbdd2faa69b168a1a32
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-<<<<<<< HEAD
-
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
-=======
         mainActivityInstance = this;
->>>>>>> fe55cf7fd5686c13b19fedbdd2faa69b168a1a32
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -234,10 +224,11 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_favorite:
                 // add auth condition
-                if(mUser == null){
+                if(mUser == null) {
                     // Not signed in, click redirect to sign in page
-                    Intent intent = new Intent(this, SigninActivity.class);
-                    startActivity(intent);
+                    Intent favoriteIntent = new Intent(this, SigninActivity.class);
+                    startActivity(favoriteIntent);
+                }
                 else {
                     //navIntent = new Intent(this, FavorityActivity.class);
                     //startActivity(navIntent);
@@ -246,8 +237,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_user:
                 if(mUser == null){
                     // Not signed in, click redirect to sign in page
-                    Intent intent = new Intent(this, SigninActivity.class);
-                    startActivity(intent);
+                    Intent signInIntent = new Intent(this, SigninActivity.class);
+                    startActivity(signInIntent);
                 } else {
                     mAuth.signOut();
                 }
