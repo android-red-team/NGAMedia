@@ -12,12 +12,22 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 public class MovieDetailActivity extends AppCompatActivity {
     public static final String EXTRA_MOVIE = "movie";
 
     private ShareActionProvider mShareActionProvider;
+
+    /**
+     *  Declare database reference
+     */
+    private DatabaseReference mDB;
 
     private Movie mMovie;
     ImageView backdrop;
@@ -65,7 +75,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         Picasso.with(this)
                 .load(mMovie.getBackdrop())
                 .into(backdrop);
-
     }
 
     @Override
@@ -97,6 +106,8 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         if (id == R.id.menu_item_favorite) {
             // TASK : code for favorite function
+
+
             return true;
         }
 
@@ -135,5 +146,32 @@ public class MovieDetailActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * add to favorite
+     */
+    private void addFavorite(final Movie movie, final String userID){
+        // read from db to get the fav list
+        // initialize database reference
+        mDB = FirebaseDatabase.getInstance().getReference();
 
+        // add the movie in the favorite list
+        mDB.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSs) {
+                Movie mMovie = movie;
+                if(dataSs == null){
+                    // add the first fav item
+                    mDB.child(userID).setValue(mMovie);
+                }else{
+                    // update fav item list
+                    mDB.child(userID).push().setValue(mMovie);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 }
