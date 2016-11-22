@@ -3,12 +3,14 @@ package nga.ngamedia;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,7 +20,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     public static final String EXTRA_MOVIE = "movie";
 
     private ShareActionProvider mShareActionProvider;
-
+    private FloatingActionButton mFloatActionBtn;
     private Movie mMovie;
     ImageView backdrop;
     ImageView poster;
@@ -48,6 +50,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         description = (TextView) findViewById(R.id.movie_description);
         poster = (ImageView) findViewById(R.id.movie_poster);
         voteAverage = (TextView) findViewById(R.id.vote_average);
+        mFloatActionBtn = (FloatingActionButton) findViewById(R.id.fab);
 
         // Movies contain a 'title' while TVShows contain a 'name'
         if(mMovie.getTitle() != null) {
@@ -66,6 +69,12 @@ public class MovieDetailActivity extends AppCompatActivity {
                 .load(mMovie.getBackdrop())
                 .into(backdrop);
 
+        mFloatActionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                
+            }
+        });
     }
 
     @Override
@@ -111,12 +120,6 @@ public class MovieDetailActivity extends AppCompatActivity {
             Intent searchIntent = new Intent();
             return true;
         }
-        if (id == R.id.menu_item_favorite) {
-            Intent intent = new Intent(getApplicationContext(), FavViewActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getApplicationContext().startActivity(intent);
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -134,6 +137,4 @@ public class MovieDetailActivity extends AppCompatActivity {
             mShareActionProvider.setShareIntent(shareIntent);
         }
     }
-
-
 }
