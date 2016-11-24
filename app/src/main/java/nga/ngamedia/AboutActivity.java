@@ -11,12 +11,17 @@ import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 /**
  * Created by kwanc on 2016-11-03.
  */
 public class AboutActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
     private ShareActionProvider mShareActionProvider;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,50 +51,65 @@ public class AboutActivity extends AppCompatActivity
         }
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
         switch(item.getItemId()){
             case R.id.nav_home:
                 Intent homeActivityIntent = new Intent(this, MainActivity.class);
-                //movieActivityIntent.putExtra("EXTRA_CLASS","Movie");
+                homeActivityIntent.putExtra("EXTRA_CLASS","Movie");
+                finish();
                 startActivity(homeActivityIntent);
-                // return true;
                 break;
             case R.id.nav_movie:
                 Intent movieActivityIntent = new Intent(this, MovieSubActivity.class);
-                movieActivityIntent.putExtra("EXTRA_CLASS","Movie");
+                movieActivityIntent.putExtra("EXTRA_CLASS","Movies");
+                finish();
                 startActivity(movieActivityIntent);
-                //return true;
                 break;
             case R.id.nav_television:
                 Intent televisionActivityIntent = new Intent(this, MovieSubActivity.class);
                 televisionActivityIntent.putExtra("EXTRA_CLASS","Television");
+                finish();
                 startActivity(televisionActivityIntent);
-                //return true;
                 break;
             case R.id.nav_aboutus:
                 Intent aboutusActivityIntent = new Intent(this, AboutActivity.class);
-                // aboutusActivityIntent.putExtra("EXTRA_CLASS","Movie");
+                finish();
                 startActivity(aboutusActivityIntent);
-                //return true;
                 break;
             case R.id.nav_share:
                 Intent sendIntent = new Intent();
                 setSendIntent(sendIntent);
                 setShareIntent(sendIntent);
-                //return true;
                 break;
-
-
+            case R.id.nav_favorite:
+                // add auth condition
+                if(mUser == null) {
+                    // Not signed in, click redirect to sign in page
+                    Intent favoriteIntent = new Intent(this, SigninActivity.class);
+                    finish();
+                    startActivity(favoriteIntent);
+                }
+                else {
+                    Intent navIntent = new Intent(this, MovieSubActivity.class);
+                    navIntent.putExtra("EXTRA_CLASS","Favorite");
+                    finish();
+                    startActivity(navIntent);
+                }
+                break;
+            case R.id.nav_user:
+                if(mUser == null){
+                    // Not signed in, click redirect to sign in page
+                    Intent signInIntent = new Intent(this, SigninActivity.class);
+                    startActivity(signInIntent);
+                } else {
+                    mAuth.signOut();
+                }
+                break;
             default:
-                Intent defaultActivityIntent = new Intent(this, MainActivity.class);
-                //movieActivityIntent.putExtra("EXTRA_CLASS","Movie");
-                startActivity(defaultActivityIntent);
-                // return true;
         }
-
-
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

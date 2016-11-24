@@ -1,9 +1,12 @@
 package nga.ngamedia;
 
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
@@ -41,6 +44,10 @@ public class MovieDetailActivity extends AppCompatActivity {
     TextView voteAverage;
     TextView releaseDate;
     TextView popularity;
+
+    // The BroadcastReceiver that tracks network connectivity changes.
+    private NetworkReceiver networkReceiver = new NetworkReceiver();
+    private Snackbar networkNotificationSnackBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,17 +121,35 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        // Registers BroadcastReceiver to track network connection changes.
+        IntentFilter networkStatusFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        networkReceiver = new NetworkReceiver();
+        this.registerReceiver(networkReceiver, networkStatusFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Unregisters BroadcastReceiver when app is paused.
+        if (networkReceiver != null) {
+            this.unregisterReceiver(networkReceiver);
+        }
+        if(networkNotificationSnackBar != null && networkNotificationSnackBar.isShown()) {
+            networkNotificationSnackBar.dismiss();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_movie_detail, menu);
-
         // Locate MenuItem with ShareActionProvider
         MenuItem item = menu.findItem(R.id.menu_item_share);
-
         // Fetch and store ShareActionProvider
         mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
 
-        // Return true to display menu
         return true;
     }
 
@@ -152,19 +177,13 @@ public class MovieDetailActivity extends AppCompatActivity {
             setShareIntent(sendIntent);
             return true;
         }
-        if (id == R.id.menu_item_search) {
-            // TASK : code for search function
-            Intent searchIntent = new Intent();
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
     // Call to set up the intent to share
     private void setSendIntent(Intent sendIntent) {
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "I found " + mMovie.getTitle() + " on NGAMedia App!" );
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "I found " + mMovie.getTitle() + " using the NGAMedia App!" );
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
     }

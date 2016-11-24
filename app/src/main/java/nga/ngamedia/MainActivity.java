@@ -172,6 +172,7 @@ public class MainActivity extends AppCompatActivity
             };
 
      */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -194,7 +195,6 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        Intent movieActivityIntent;
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
@@ -207,7 +207,6 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        boolean login = false;
         // Handle navigation view item clicks here.
         switch(item.getItemId()){
             case R.id.nav_home:
@@ -225,7 +224,6 @@ public class MainActivity extends AppCompatActivity
                 Intent televisionActivityIntent = new Intent(this, MovieSubActivity.class);
                 televisionActivityIntent.putExtra("EXTRA_CLASS","Television");
                 startActivity(televisionActivityIntent);
-                //return true;
                 break;
             case R.id.nav_aboutus:
                 Intent aboutusActivityIntent = new Intent(this, AboutActivity.class);
@@ -235,7 +233,6 @@ public class MainActivity extends AppCompatActivity
                 Intent sendIntent = new Intent();
                 setSendIntent(sendIntent);
                 setShareIntent(sendIntent);
-                //return true;
                 break;
             case R.id.nav_favorite:
                 // add auth condition
