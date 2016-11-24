@@ -21,6 +21,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -38,6 +45,11 @@ public class MovieSubActivity extends AppCompatActivity
     private MoviesAdapter mAdapter;
     private SearchView searchView;
     private MenuItem searchMenuItem;
+    private DatabaseReference mDB;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
+    private List<Movie> favList = new ArrayList<Movie>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +96,8 @@ public class MovieSubActivity extends AppCompatActivity
                 getMedia(1, null);
             } else if (myIntent.getStringExtra("EXTRA_CLASS").equals("TVShows")) {
                 getMedia(5, null);
+            } else if (myIntent.getStringExtra("EXTRA_CLASS").equals("Favorite")){
+                getMedia(8, null);
             }
         }
     }
@@ -324,6 +338,12 @@ public class MovieSubActivity extends AppCompatActivity
                 });
                 break;
             }
+
+            // favorite
+            case (8): {
+                retrieveFav();
+                break;
+            }
         }
 
     }
@@ -365,9 +385,11 @@ public class MovieSubActivity extends AppCompatActivity
         @Override
         public void onBindViewHolder(MovieViewHolder holder, int position) {
             Movie movie = mMovieList.get(position);
-            if(movie.getPoster().length() > 35) {
+            String url = "http://image.tmdb.org/t/p/w500";
+
+            if(movie.getPoster().length() > 5) {
                 Picasso.with(mContext)
-                        .load(movie.getPoster())
+                        .load(url + movie.getPoster())
                         .placeholder(R.color.colorAccent)
                         .into(holder.imageView);
             } else {
@@ -403,6 +425,31 @@ public class MovieSubActivity extends AppCompatActivity
         if (mShareActionProvider != null) {
             mShareActionProvider.setShareIntent(shareIntent);
         }
+    }
+
+    private void retrieveFav(){
+        mDB = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+        String uid = mUser.getUid();
+
+        mDB.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Movie mMovie = null;
+                for(DataSnapshot dsp : dataSnapshot.getChildren()){
+                    mMovie = dsp.getValue(Movie.class);
+                    favList.add(mMovie);
+                }
+                mAdapter.setMovieList(favList);
+                //Log.d("Listent", Integer.toString(favList.size()));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }
 

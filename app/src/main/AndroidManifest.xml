@@ -53,10 +53,6 @@
         <activity
             android:name=".SignupActivity"
             android:label="@string/title_activity_signup" />
-        <activity
-            android:name=".FavViewActivity"
-            android:label="@string/title_fav"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

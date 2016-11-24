@@ -175,11 +175,13 @@ public class SigninActivity extends AppCompatActivity {
                             Toast.makeText(SigninActivity.this,
                                     "Sign in failed, please try again...",
                                     Toast.LENGTH_SHORT).show();
-                            }
+                        }
+                        else {
                             Toast.makeText(SigninActivity.this,
                                     "Welcome to your movie world!",
                                     Toast.LENGTH_SHORT).show();
-                                    finish();
+                            finish();
+                        }
                         }
                 });
 
