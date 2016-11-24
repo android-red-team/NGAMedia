@@ -24,23 +24,53 @@
             android:layout_width="match_parent"
             android:padding="@dimen/activity_vertical_margin"
             android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/vote_average"
-            android:layout_width="match_parent"
-            android:padding="@dimen/activity_vertical_margin"
-            android:layout_height="wrap_content"/>
+        <FrameLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="34dp"
+                    android:layout_marginLeft="@dimen/activity_vertical_margin"
+                    android:src="@drawable/rating_icon"/>
+                <TextView
+                    android:id="@+id/vote_average"
+                    android:layout_width="263dp"
+                    android:padding="@dimen/activity_vertical_margin"
+                    android:layout_marginLeft="40dp"
+                    android:layout_height="wrap_content"/>
+        </FrameLayout>
 
+        <FrameLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="34dp"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:src="@drawable/popularity2_icon"/>
         <TextView
             android:id="@+id/popularity"
             android:layout_width="match_parent"
             android:padding="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="40dp"
             android:layout_height="wrap_content"/>
+        </FrameLayout>
 
+        <FrameLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="34dp"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:src="@drawable/release_icon"/>
         <TextView
             android:id="@+id/release_date"
             android:layout_width="match_parent"
             android:padding="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="40dp"
             android:layout_height="wrap_content"/>
+        </FrameLayout>
 
         <ImageView
             android:id="@+id/movie_poster"
