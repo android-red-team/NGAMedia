@@ -58,7 +58,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             title.setText(mMovie.getName());
         }
         description.setText(mMovie.getDescription());
-        voteAverage.setText("Average Rating: " + Double.toString(mMovie.getVoteAverage()));
+        voteAverage.setText("Average Rating: " + mMovie.getVoteAverage());
         Picasso.with(this)
                 .load(mMovie.getPoster())
                 .into(poster);
