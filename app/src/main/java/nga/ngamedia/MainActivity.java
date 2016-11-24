@@ -67,7 +67,9 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setIcon(R.drawable.nga_logo);
+        getSupportActionBar().setTitle(" ");
+        //getSupportActionBar().setIcon(R.drawable.nga_logo);
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -94,6 +96,7 @@ public class MainActivity extends AppCompatActivity
         mMovieAdapter2 = new MoviesAdapter(this);
         mMovieRecyclerView2.setAdapter(mMovieAdapter2);
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -106,17 +109,16 @@ public class MainActivity extends AppCompatActivity
         TextView popularMovieHeaderTV = (TextView) findViewById(R.id.popularMovieHeader);
         String popular_movies_header = getString(R.string.popular_movies_header);
 
-        TextView popularTVHeaderTV = (TextView) findViewById(R.id.popularTVHeader);
+        TextView upcomingMovieHeaderTV = (TextView) findViewById(R.id.upcomingMoviesHeader);
+        String upcoming_movies_header = getString(R.string.upcoming_movies_header);
+
+        TextView popularTVHeader = (TextView) findViewById(R.id.popularTVHeader);
         String popular_tv_shows_header = getString(R.string.popular_tv_shows_header);
 
-        TextView popularMovieHeader2TV = (TextView) findViewById(R.id.popularMovieHeader2);
-        String popular_movies_header_2 = getString(R.string.popular_movies_header_2);
         popularMovieHeaderTV.setText(" ");
-        popularTVHeaderTV.setText(" ");
-        popularMovieHeader2TV.setText(" ");
+        upcomingMovieHeaderTV.setText(" ");
+        popularTVHeader.setText(" ");
         loadMedia();
-
-
     }
 
     @Override
@@ -140,7 +142,7 @@ public class MainActivity extends AppCompatActivity
             //super.onBackPressed();
             new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setTitle("Quit Application")
                     .setMessage("Are you sure you want to close NGAMedia app?")
-                    .setIcon(R.drawable.movie_icon)
+                    .setIcon(R.drawable.alert_icon)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -170,6 +172,7 @@ public class MainActivity extends AppCompatActivity
             };
 
      */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -192,7 +195,6 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        Intent movieActivityIntent;
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
@@ -205,7 +207,6 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        boolean login = false;
         // Handle navigation view item clicks here.
         switch(item.getItemId()){
             case R.id.nav_home:
@@ -223,7 +224,6 @@ public class MainActivity extends AppCompatActivity
                 Intent televisionActivityIntent = new Intent(this, MovieSubActivity.class);
                 televisionActivityIntent.putExtra("EXTRA_CLASS","Television");
                 startActivity(televisionActivityIntent);
-                //return true;
                 break;
             case R.id.nav_aboutus:
                 Intent aboutusActivityIntent = new Intent(this, AboutActivity.class);
@@ -233,7 +233,6 @@ public class MainActivity extends AppCompatActivity
                 Intent sendIntent = new Intent();
                 setSendIntent(sendIntent);
                 setShareIntent(sendIntent);
-                //return true;
                 break;
             case R.id.nav_favorite:
                 // add auth condition
@@ -289,7 +288,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        service.getPopularTV(new Callback<Movie.MovieResult>() {
+        service.getUpcomingMovies(new Callback<Movie.MovieResult>() {
             @Override
             public void success(Movie.MovieResult movieResult, Response response) {
                 mTVShowAdapter.setMovieList(movieResult.getResults());
@@ -301,7 +300,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        service.getRecentMovies(new Callback<Movie.MovieResult>() {
+        service.getPopularTV(new Callback<Movie.MovieResult>() {
             @Override
             public void success(Movie.MovieResult movieResult, Response response) {
                 mMovieAdapter2.setMovieList(movieResult.getResults());
@@ -383,17 +382,17 @@ public class MainActivity extends AppCompatActivity
                 TextView popularMovieHeaderTV = (TextView) findViewById(R.id.popularMovieHeader);
                 String popular_movies_header = getString(R.string.popular_movies_header);
 
-                TextView popularTVHeaderTV = (TextView) findViewById(R.id.popularTVHeader);
-                String popular_tv_shows_header = getString(R.string.popular_tv_shows_header);
+                TextView upcomingMovieHeaderTV = (TextView) findViewById(R.id.upcomingMoviesHeader);
+                String upcoming_movies_header = getString(R.string.upcoming_movies_header);
 
-                TextView popularMovieHeader2TV = (TextView) findViewById(R.id.popularMovieHeader2);
-                String popular_movies_header_2 = getString(R.string.popular_movies_header_2);
+                TextView popularTVHeader = (TextView) findViewById(R.id.popularTVHeader);
+                String popular_tv_shows_header = getString(R.string.popular_tv_shows_header);
 
                 // params[0] refers to whether the device is connected to the internet
                 if(params[0]) {
                     popularMovieHeaderTV.setText(popular_movies_header);
-                    popularTVHeaderTV.setText(popular_tv_shows_header);
-                    popularMovieHeader2TV.setText(popular_movies_header_2);
+                    upcomingMovieHeaderTV.setText(upcoming_movies_header);
+                    popularTVHeader.setText(popular_tv_shows_header);
                     // Hide Snackbar
                     if(networkNotificationSnackBar != null && networkNotificationSnackBar.isShown()) {
                         networkNotificationSnackBar.dismiss();
@@ -401,6 +400,7 @@ public class MainActivity extends AppCompatActivity
                     networkNotificationSnackBar = Snackbar.make(findViewById(android.R.id.content), "Loading media...", Snackbar.LENGTH_SHORT);
                     networkNotificationSnackBar.getView().setBackgroundColor(Color.BLUE);
                     networkNotificationSnackBar.show();
+                    loadMedia();
                 } else {
                     networkNotificationSnackBar = Snackbar.make(findViewById(android.R.id.content), "Warning: App cannot function without an internet connection!", Snackbar.LENGTH_INDEFINITE);
                     networkNotificationSnackBar.getView().setBackgroundColor(Color.RED);
@@ -413,7 +413,7 @@ public class MainActivity extends AppCompatActivity
     // Call to set up the intent to share
     private void setSendIntent(Intent sendIntent) {
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "I found this movie on NGAMedia");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "I'm using NGAMedia App to find the latest movies and tv shows! You can download it for free on the Google Playstore!");
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
     }

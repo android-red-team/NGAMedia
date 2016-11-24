@@ -3,8 +3,11 @@ package nga.ngamedia;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -50,6 +53,10 @@ public class MovieSubActivity extends AppCompatActivity
     private FirebaseUser mUser;
     private List<Movie> favList = new ArrayList<Movie>();
 
+    // The BroadcastReceiver that tracks network connectivity changes.
+    private NetworkReceiver networkReceiver = new NetworkReceiver();
+    private Snackbar networkNotificationSnackBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +101,7 @@ public class MovieSubActivity extends AppCompatActivity
             setTitle(myIntent.getStringExtra("EXTRA_CLASS"));
             if(myIntent.getStringExtra("EXTRA_CLASS").equals("Movies")) {
                 getMedia(1, null);
-            } else if (myIntent.getStringExtra("EXTRA_CLASS").equals("TVShows")) {
+            } else if (myIntent.getStringExtra("EXTRA_CLASS").equals("Television")) {
                 getMedia(5, null);
             } else if (myIntent.getStringExtra("EXTRA_CLASS").equals("Favorite")){
                 getMedia(8, null);
@@ -103,6 +110,27 @@ public class MovieSubActivity extends AppCompatActivity
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        // Registers BroadcastReceiver to track network connection changes.
+        IntentFilter networkStatusFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        networkReceiver = new NetworkReceiver();
+        this.registerReceiver(networkReceiver, networkStatusFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Unregisters BroadcastReceiver when app is paused.
+        if (networkReceiver != null) {
+            this.unregisterReceiver(networkReceiver);
+        }
+        if(networkNotificationSnackBar != null && networkNotificationSnackBar.isShown()) {
+            networkNotificationSnackBar.dismiss();
+        }
+    }
+
+        @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -150,7 +178,7 @@ public class MovieSubActivity extends AppCompatActivity
         switch(item.getItemId()){
             case R.id.nav_home:
                 Intent homeActivityIntent = new Intent(this, MainActivity.class);
-                //movieActivityIntent.putExtra("EXTRA_CLASS","Movie");
+                homeActivityIntent.putExtra("EXTRA_CLASS","Movie");
                 finish();
                 startActivity(homeActivityIntent);
                 break;
@@ -162,41 +190,42 @@ public class MovieSubActivity extends AppCompatActivity
                 break;
             case R.id.nav_television:
                 Intent televisionActivityIntent = new Intent(this, MovieSubActivity.class);
-                televisionActivityIntent.putExtra("EXTRA_CLASS", "Television");
+                televisionActivityIntent.putExtra("EXTRA_CLASS","Television");
+                finish();
                 startActivity(televisionActivityIntent);
-                //return true;
                 break;
-
             case R.id.nav_aboutus:
                 Intent aboutusActivityIntent = new Intent(this, AboutActivity.class);
+                finish();
                 startActivity(aboutusActivityIntent);
                 break;
             case R.id.nav_share:
                 Intent sendIntent = new Intent();
                 setSendIntent(sendIntent);
                 setShareIntent(sendIntent);
-                //return true;
                 break;
             case R.id.nav_favorite:
                 // add auth condition
-                if(true){
-                    //navIntent = new Intent(this, FavorityActivity.class);
-                    //startActivity(navIntent);
+                if(mUser == null) {
+                    // Not signed in, click redirect to sign in page
+                    Intent favoriteIntent = new Intent(this, SigninActivity.class);
+                    finish();
+                    startActivity(favoriteIntent);
                 }
                 else {
-                    Intent navIntent = new Intent(this, SigninActivity.class);
+                    Intent navIntent = new Intent(this, MovieSubActivity.class);
+                    navIntent.putExtra("EXTRA_CLASS","Favorite");
+                    finish();
                     startActivity(navIntent);
                 }
                 break;
             case R.id.nav_user:
-                if(true){
-                    // Signout or user profile.
-                    // MenuItem uname = (MenuItem) findViewById(R.id.nav_user);
-                    // uname.setTitle(username);
-                }
-                else {
-                    Intent navIntent = new Intent(this, SigninActivity.class);
-                    startActivity(navIntent);
+                if(mUser == null){
+                    // Not signed in, click redirect to sign in page
+                    Intent signInIntent = new Intent(this, SigninActivity.class);
+                    startActivity(signInIntent);
+                } else {
+                    mAuth.signOut();
                 }
                 break;
             default:
@@ -245,7 +274,7 @@ public class MovieSubActivity extends AppCompatActivity
 
             // recent movies
             case (2): {
-                service.getRecentMovies(new Callback<Movie.MovieResult>() {
+                service.getUpcomingMovies(new Callback<Movie.MovieResult>() {
                     @Override
                     public void success(Movie.MovieResult movieResult, Response response) {
                         mAdapter.setMovieList(movieResult.getResults());
@@ -415,7 +444,7 @@ public class MovieSubActivity extends AppCompatActivity
     // Call to set up the intent to share
     private void setSendIntent(Intent sendIntent) {
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "I found this movie on NGAMedia");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "I'm using NGAMedia App to find the latest movies and tv shows! You can download it for free on the Google Playstore!");
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
     }
@@ -427,6 +456,7 @@ public class MovieSubActivity extends AppCompatActivity
         }
     }
 
+    // Retrieve a list of Movie objects and set it to the adapter
     private void retrieveFav(){
         mDB = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();

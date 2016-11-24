@@ -9,16 +9,9 @@
     tools:context="nga.ngamedia.MovieSubActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <TextView
-        android:text=""
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/header" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_below="@id/header"
         android:layout_height="wrap_content" />
 
 </RelativeLayout>
