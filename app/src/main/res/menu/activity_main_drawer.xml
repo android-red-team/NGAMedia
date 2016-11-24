@@ -8,33 +8,33 @@
             android:title="Home" />
         <item
             android:id="@+id/nav_movie"
-            android:icon="@drawable/movie_icon"
+            android:icon="@drawable/ic_menu_movie"
             android:title="Movies" />
         <item
 
             android:id="@+id/nav_television"
-            android:icon="@drawable/television_icon"
-            android:title="TVShows" />
+            android:icon="@drawable/ic_menu_television"
+            android:title="TV Shows" />
         <item
             android:id="@+id/nav_favorite"
-            android:icon="@drawable/favorite_icon"
-            android:title="Favorite" />
+            android:icon="@drawable/ic_menu_favorites"
+            android:title="Favorites" />
         <item
             android:id="@+id/nav_aboutus"
-            android:icon="@drawable/aboutus_icon"
-            android:title="AboutUs" />
+            android:icon="@drawable/ic_menu_duck"
+            android:title="About" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Your Profile">
         <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
             <item
                 android:id="@+id/nav_user"
                 android:icon="@drawable/logout_icon"
                 android:title="Sign In"/>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
         </menu>
     </item>
 

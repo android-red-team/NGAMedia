@@ -11,8 +11,8 @@ public interface TMDBApiService {
     @GET("/discover/movie?language=en-US&sort_by=popularity.desc")
     void getPopularMovies(Callback<Movie.MovieResult> cb);
 
-    @GET("/discover/movie?language=en-US&sort_by=release_date.desc")
-    void getRecentMovies(Callback<Movie.MovieResult> cb);
+    @GET("/movie/upcoming?language=en-US&sort_by=popularity.desc")
+    void getUpcomingMovies(Callback<Movie.MovieResult> cb);
 
     @GET("/discover/movie?language=en-US&sort_by=vote_average.desc")
     void getBestMovies(Callback<Movie.MovieResult> cb);
