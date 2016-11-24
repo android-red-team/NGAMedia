@@ -104,13 +104,13 @@ public class MainActivity extends AppCompatActivity
 
         // Initialize UI resources to be updated
         TextView popularMovieHeaderTV = (TextView) findViewById(R.id.popularMovieHeader);
-        String popular_movies_header = getString(R.string.popular_movies_header);
+        //String popular_movies_header = getString(R.string.popular_movies_header);
 
         TextView popularTVHeaderTV = (TextView) findViewById(R.id.popularTVHeader);
-        String popular_tv_shows_header = getString(R.string.popular_tv_shows_header);
+        //String popular_tv_shows_header = getString(R.string.popular_tv_shows_header);
 
         TextView popularMovieHeader2TV = (TextView) findViewById(R.id.popularMovieHeader2);
-        String popular_movies_header_2 = getString(R.string.popular_movies_header_2);
+        //String popular_movies_header_2 = getString(R.string.popular_movies_header_2);
         popularMovieHeaderTV.setText(" ");
         popularTVHeaderTV.setText(" ");
         popularMovieHeader2TV.setText(" ");
@@ -132,13 +132,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed()
+     {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             //super.onBackPressed();
-            new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setTitle("Quit Application")
+            new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Quit Application")
                     .setMessage("Are you sure you want to close NGAMedia app?")
                     .setIcon(R.drawable.movie_icon)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -169,6 +171,12 @@ public class MainActivity extends AppCompatActivity
                 }
             };
 
+     */
+
+    /**
+     * Set the top toolbar
+     * @param menu
+     * @return
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

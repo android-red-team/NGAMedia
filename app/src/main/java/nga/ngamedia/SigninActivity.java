@@ -167,23 +167,22 @@ public class SigninActivity extends AppCompatActivity {
 
     private void userSignin(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(SigninActivity.this,
-                                    "Sign in failed, please try again...",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            Toast.makeText(SigninActivity.this,
-                                    "Welcome to your movie world!",
-                                    Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-                        }
-                });
+             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                 @Override
+                 public void onComplete(@NonNull Task<AuthResult> task) {
+                     if (!task.isSuccessful()) {
+                         Toast.makeText(SigninActivity.this,
+                                        "Sign in failed, please try again...",
+                                        Toast.LENGTH_SHORT).show();
+                     }
+                     else {
+                         Toast.makeText(SigninActivity.this,
+                                        "Welcome to your movie world!",
+                                        Toast.LENGTH_SHORT).show();
+                         finish();
+                     }
+                 }
+             });
 
     }
 
