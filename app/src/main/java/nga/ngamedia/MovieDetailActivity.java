@@ -25,8 +25,8 @@ public class MovieDetailActivity extends AppCompatActivity {
     TextView title;
     TextView description;
     TextView voteAverage;
-
-
+    TextView releaseDate;
+    TextView popularity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +48,12 @@ public class MovieDetailActivity extends AppCompatActivity {
         description = (TextView) findViewById(R.id.movie_description);
         poster = (ImageView) findViewById(R.id.movie_poster);
         voteAverage = (TextView) findViewById(R.id.vote_average);
+        releaseDate = (TextView) findViewById(R.id.release_date);
+        popularity = (TextView) findViewById(R.id.popularity);
+
 
         // Movies contain a 'title' while TVShows contain a 'name'
+        // Movies contain 'release_date' while TVShows contain 'first_air_date'
         if(mMovie.getTitle() != null) {
             setTitle(mMovie.getTitle());
             title.setText(mMovie.getTitle());
@@ -58,14 +62,21 @@ public class MovieDetailActivity extends AppCompatActivity {
             title.setText(mMovie.getName());
         }
         description.setText(mMovie.getDescription());
-        voteAverage.setText("Average Rating: " + mMovie.getVoteAverage());
         Picasso.with(this)
                 .load(mMovie.getPoster())
                 .into(poster);
         Picasso.with(this)
                 .load(mMovie.getBackdrop())
                 .into(backdrop);
-
+        int ave = (int) Double.parseDouble(mMovie.getVoteAverage());
+        voteAverage.setText("Average Rating: " + ave + " based on " + mMovie.getVote_count() + " votes");
+        int pop = (int) Double.parseDouble(mMovie.getPopularity());
+        popularity.setText("Popularity Rating: " + pop);
+        if(mMovie.getRelease_date() != null) {
+            releaseDate.setText("Release Date: " + mMovie.getRelease_date());
+        } else {
+            releaseDate.setText("First Airing Date: " + mMovie.getFirst_air_date());
+        }
     }
 
     @Override
@@ -124,7 +135,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     // Call to set up the intent to share
     private void setSendIntent(Intent sendIntent) {
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "I found this movie on NGAMedia" );
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "I found " + mMovie.getTitle() + " on NGAMedia App!" );
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
     }

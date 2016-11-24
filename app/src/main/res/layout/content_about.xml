@@ -1,47 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_about"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="nga.ngamedia.AboutActivity"
     tools:showIn="@layout/app_bar_about">
 
+
     <TextView
-        android:text="Credit API called from API.com  Policy: This product uses the YMDb API but is not endorsed or certified by TMDb"
+        android:text="This app was created by 3 BCIT Students. Kwanchanok Sonsoi, Alex Zhang and Gerard Ng"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/text_view2"
-        android:layout_below="@+id/text_view"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="22dp"
-        android:layout_marginLeft="13dp"
-        android:layout_marginStart="13dp"/>
+        android:gravity="center"
+        android:id="@+id/textView2"
+        android:layout_weight="1" />
 
     <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/logo_icon"
-        android:layout_marginTop="30dp"
-        android:layout_below="@+id/text_view2"
-        android:layout_centerHorizontal="true"
-        android:scaleType="fitXY"/>
+        android:layout_width="277dp"
+        android:layout_height="182dp"
+        android:layout_gravity="center"
+        android:src="@drawable/nga_logo_pure"
+        android:id="@+id/imageView2"
+        android:layout_weight="0.24" />
 
     <TextView
-        android:text="Created by CST BCIT student."
-        android:layout_width="wrap_content"
+        android:text="@string/tmdb_credit"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/text_view"
-        android:layout_marginTop="24dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="13dp"
-        android:layout_marginStart="13dp"/>
+        android:gravity="center"
+        android:id="@+id/textView3"
+        android:layout_weight="1" />
 
-
-</RelativeLayout>
+    <ImageView
+        android:layout_width="228dp"
+        android:layout_height="157dp"
+        android:layout_gravity="center"
+        android:src="@drawable/tmdb_logo"
+        android:id="@+id/imageView3" />
+</LinearLayout>

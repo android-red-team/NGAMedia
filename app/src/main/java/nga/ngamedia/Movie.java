@@ -21,6 +21,10 @@ public class Movie implements Parcelable {
     private String backdrop;
     @SerializedName("vote_average")
     private String voteAverage;
+    private String release_date;
+    private String first_air_date;
+    private String vote_count;
+    private String popularity;
 
     public Movie() {}
 
@@ -31,6 +35,10 @@ public class Movie implements Parcelable {
         description = in.readString();
         backdrop = in.readString();
         voteAverage = in.readString();
+        vote_count = in.readString();
+        popularity = in.readString();
+        release_date = in.readString();
+        first_air_date = in.readString();
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -104,6 +112,46 @@ public class Movie implements Parcelable {
         if (voteAverage != null) {
             parcel.writeString(voteAverage);
         }
+        if (vote_count == null) {
+            parcel.writeString("0");
+        } else {
+            parcel.writeString(vote_count);
+        }
+            parcel.writeString(popularity);
+            parcel.writeString(release_date);
+            parcel.writeString(first_air_date);
+    }
+
+    public String getRelease_date() {
+        return release_date;
+    }
+
+    public void setRelease_date(String release_date) {
+        this.release_date = release_date;
+    }
+
+    public String getVote_count() {
+        return vote_count;
+    }
+
+    public void setVote_count(String vote_count) {
+        this.vote_count = vote_count;
+    }
+
+    public String getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(String popularity) {
+        this.popularity = popularity;
+    }
+
+    public String getFirst_air_date() {
+        return first_air_date;
+    }
+
+    public void setFirst_air_date(String first_air_date) {
+        this.first_air_date = first_air_date;
     }
 
     public static class MovieResult {

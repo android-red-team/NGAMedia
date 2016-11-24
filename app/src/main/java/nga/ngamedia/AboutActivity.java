@@ -97,7 +97,7 @@ public class AboutActivity extends AppCompatActivity
     // Call to set up the intent to share
     private void setSendIntent(Intent sendIntent) {
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "I'm using NGAMedia App to find the latest movies and tv shows! You can download it for free on the Google Playstore!");
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
     }

@@ -122,4 +122,6 @@
     <string name="popular_movies_header">Popular Movies</string>
     <string name="popular_tv_shows_header">Popular TV Shows</string>
     <string name="popular_movies_header_2">Recent Movies</string>
+    <string name="tmdb_credit">This product uses the TMDb API but is not endorsed or certified by TMDb</string>
+    <string name="upcoming_movies_header">Upcoming Movies</string>
 </resources>

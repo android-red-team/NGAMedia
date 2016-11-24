@@ -231,7 +231,7 @@ public class MovieSubActivity extends AppCompatActivity
 
             // recent movies
             case (2): {
-                service.getRecentMovies(new Callback<Movie.MovieResult>() {
+                service.getUpcomingMovies(new Callback<Movie.MovieResult>() {
                     @Override
                     public void success(Movie.MovieResult movieResult, Response response) {
                         mAdapter.setMovieList(movieResult.getResults());
@@ -393,7 +393,7 @@ public class MovieSubActivity extends AppCompatActivity
     // Call to set up the intent to share
     private void setSendIntent(Intent sendIntent) {
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "I found this movie on NGAMedia");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "I'm using NGAMedia App to find the latest movies and tv shows! You can download it for free on the Google Playstore!");
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
     }
