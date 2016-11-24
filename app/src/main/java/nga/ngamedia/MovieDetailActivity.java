@@ -3,22 +3,36 @@ package nga.ngamedia;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 public class MovieDetailActivity extends AppCompatActivity {
     public static final String EXTRA_MOVIE = "movie";
 
     private ShareActionProvider mShareActionProvider;
+    /**
+     *  Declare database reference
+     */
+    private DatabaseReference mDB;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
 
+    private FloatingActionButton mFloatActionBtn;
     private Movie mMovie;
     ImageView backdrop;
     ImageView poster;
@@ -50,7 +64,10 @@ public class MovieDetailActivity extends AppCompatActivity {
         voteAverage = (TextView) findViewById(R.id.vote_average);
         releaseDate = (TextView) findViewById(R.id.release_date);
         popularity = (TextView) findViewById(R.id.popularity);
-
+        mFloatActionBtn = (FloatingActionButton) findViewById(R.id.fab);
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+        String url = "http://image.tmdb.org/t/p/w500";
 
         // Movies contain a 'title' while TVShows contain a 'name'
         // Movies contain 'release_date' while TVShows contain 'first_air_date'
@@ -63,7 +80,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         }
         description.setText(mMovie.getDescription());
         Picasso.with(this)
-                .load(mMovie.getPoster())
+                .load(url + mMovie.getPoster())
                 .into(poster);
         Picasso.with(this)
                 .load(mMovie.getBackdrop())
@@ -77,6 +94,23 @@ public class MovieDetailActivity extends AppCompatActivity {
         } else {
             releaseDate.setText("First Airing Date: " + mMovie.getFirst_air_date());
         }
+
+        // Floating add button
+        mFloatActionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mUser == null){
+                    Intent intent = new Intent(getApplicationContext(), SigninActivity.class);
+                    startActivityForResult(intent, 0);
+                    finish();
+                }else {
+                    //addFavorite(mMovie, mUser.getUid());
+                    mDB = FirebaseDatabase.getInstance().getReference();
+                    mDB.child(mUser.getUid()).push().setValue(mMovie);
+                    Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -108,6 +142,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         if (id == R.id.menu_item_favorite) {
             // TASK : code for favorite function
+            //addFavorite(mMovie, mUser.getUid());
             return true;
         }
 
@@ -120,12 +155,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         if (id == R.id.menu_item_search) {
             // TASK : code for search function
             Intent searchIntent = new Intent();
-            return true;
-        }
-        if (id == R.id.menu_item_favorite) {
-            Intent intent = new Intent(getApplicationContext(), FavViewActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getApplicationContext().startActivity(intent);
             return true;
         }
 
@@ -145,6 +174,4 @@ public class MovieDetailActivity extends AppCompatActivity {
             mShareActionProvider.setShareIntent(shareIntent);
         }
     }
-
-
 }

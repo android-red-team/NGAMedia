@@ -245,8 +245,9 @@ public class MainActivity extends AppCompatActivity
                     startActivity(favoriteIntent);
                 }
                 else {
-                    //navIntent = new Intent(this, FavorityActivity.class);
-                    //startActivity(navIntent);
+                    Intent navIntent = new Intent(this, MovieSubActivity.class);
+                    navIntent.putExtra("EXTRA_CLASS","Favorite");
+                    startActivity(navIntent);
                 }
                 break;
             case R.id.nav_user:
@@ -327,6 +328,7 @@ public class MainActivity extends AppCompatActivity
         private List<Movie> mMovieList;
         private LayoutInflater mInflater;
         private Context mContext;
+        private String url = "http://image.tmdb.org/t/p/w500";
 
         public MoviesAdapter(Context context) {
             this.mContext = context;
@@ -353,7 +355,7 @@ public class MainActivity extends AppCompatActivity
         public void onBindViewHolder(MovieViewHolder holder, int position) {
             Movie movie = mMovieList.get(position);
             Picasso.with(mContext)
-                    .load(movie.getPoster())
+                    .load(url + movie.getPoster())
                     .placeholder(R.color.colorAccent)
                     .into(holder.imageView);
         }
