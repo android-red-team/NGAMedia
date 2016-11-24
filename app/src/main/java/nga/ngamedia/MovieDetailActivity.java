@@ -93,11 +93,11 @@ public class MovieDetailActivity extends AppCompatActivity {
                 .load(mMovie.getBackdrop())
                 .into(backdrop);
         int ave = (int) Double.parseDouble(mMovie.getVoteAverage());
-        voteAverage.setText("Average Rating: " + ave + " based on " + mMovie.getVote_count() + " votes");
+        voteAverage.setText("" + ave + " /10 "+" (out of " + mMovie.getVote_count() + " votes)");
         int pop = (int) Double.parseDouble(mMovie.getPopularity());
-        popularity.setText("Popularity Rating: " + pop);
+        popularity.setText("" + pop + " Popularity Rating");
         if(mMovie.getRelease_date() != null) {
-            releaseDate.setText("Release Date: " + mMovie.getRelease_date());
+            releaseDate.setText("" + mMovie.getRelease_date());
         } else {
             releaseDate.setText("First Airing Date: " + mMovie.getFirst_air_date());
         }
@@ -162,12 +162,6 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
-        }
-
-        if (id == R.id.menu_item_favorite) {
-            // TASK : code for favorite function
-            //addFavorite(mMovie, mUser.getUid());
             return true;
         }
 
