@@ -40,5 +40,4 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_movie_detail"/>
-
 </android.support.design.widget.CoordinatorLayout>

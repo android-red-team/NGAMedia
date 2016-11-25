@@ -27,6 +27,7 @@
         android:id="@+id/imageView2"
         android:layout_weight="0.24" />
 
+
     <TextView
         android:text="@string/tmdb_credit"
         android:layout_width="match_parent"
@@ -40,5 +41,13 @@
         android:layout_height="157dp"
         android:layout_gravity="center"
         android:src="@drawable/tmdb_logo"
-        android:id="@+id/imageView3" />
+        android:id="@+id/imageView3"
+        android:layout_weight="0.24"/>
+
+    <TextView
+        android:text="@string/copyright"
+        android:id="@+id/cpright"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"/>
 </LinearLayout>

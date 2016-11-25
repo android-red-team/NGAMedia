@@ -11,8 +11,10 @@
 
     <TextView
         android:text="@string/popular_movies_header"
+        android:textStyle="bold"
         android:layout_width="match_parent"
-        android:layout_height="15dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="10dp"
         android:id="@+id/popularMovieHeader" />
 
     <android.support.v7.widget.RecyclerView
@@ -23,8 +25,10 @@
 
     <TextView
         android:text="@string/upcoming_movies_header"
+        android:textStyle="bold"
         android:layout_width="match_parent"
-        android:layout_height="15dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="10dp"
         android:id="@+id/upcomingMoviesHeader"
         android:layout_below="@id/recyclerView"/>
 
@@ -36,8 +40,10 @@
 
     <TextView
         android:text="@string/popular_tv_shows_header"
+        android:textStyle="bold"
         android:layout_width="match_parent"
-        android:layout_height="15dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="10dp"
         android:id="@+id/popularTVHeader"
         android:layout_below="@id/recyclerView2"/>
 
