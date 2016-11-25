@@ -48,9 +48,9 @@ public class MovieSubActivity extends AppCompatActivity
     private MoviesAdapter mAdapter;
     private SearchView searchView;
     private MenuItem searchMenuItem;
-    private DatabaseReference mDB;
-    private FirebaseAuth mAuth;
-    private FirebaseUser mUser;
+    private DatabaseReference mDB = FirebaseDatabase.getInstance().getReference();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser mUser = mAuth.getCurrentUser();
     private List<Movie> favList = new ArrayList<Movie>();
 
     // The BroadcastReceiver that tracks network connectivity changes.
@@ -458,9 +458,6 @@ public class MovieSubActivity extends AppCompatActivity
 
     // Retrieve a list of Movie objects and set it to the adapter
     private void retrieveFav(){
-        mDB = FirebaseDatabase.getInstance().getReference();
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
         String uid = mUser.getUid();
 
         mDB.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {

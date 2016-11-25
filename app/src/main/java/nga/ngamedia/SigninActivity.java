@@ -63,15 +63,15 @@ public class SigninActivity extends AppCompatActivity {
                 attemptSignin();
             }
         });
-        /*mForgetView.setOnClickListener(new View.OnClickListener(){
+        mForgetView.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
                 // Start SignupActivity
-                Intent intent = new Intent(getApplicationContext(), ForgetActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ResetPasswordActivity.class);
                 startActivity(intent);
             }
-        });*/
+        });
 
         mSignupView.setOnClickListener(new View.OnClickListener(){
 

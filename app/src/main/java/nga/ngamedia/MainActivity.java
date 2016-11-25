@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -49,9 +50,9 @@ public class MainActivity extends AppCompatActivity
     private MoviesAdapter mTVShowAdapter;
 
     // Firebase auth
-    private FirebaseUser mUser;
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseUser mUser;
+
     // The BroadcastReceiver that tracks network connectivity changes.
     private NetworkReceiver networkReceiver = new NetworkReceiver();
     private Snackbar networkNotificationSnackBar;
@@ -61,8 +62,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
         mainActivityInstance = this;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -110,10 +109,10 @@ public class MainActivity extends AppCompatActivity
         //String popular_movies_header = getString(R.string.popular_movies_header);
 
         TextView upcomingMovieHeaderTV = (TextView) findViewById(R.id.upcomingMoviesHeader);
-        String upcoming_movies_header = getString(R.string.upcoming_movies_header);
+        //String upcoming_movies_header = getString(R.string.upcoming_movies_header);
 
         TextView popularTVHeader = (TextView) findViewById(R.id.popularTVHeader);
-        String popular_tv_shows_header = getString(R.string.popular_tv_shows_header);
+        //String popular_tv_shows_header = getString(R.string.popular_tv_shows_header);
 
         popularMovieHeaderTV.setText(" ");
         upcomingMovieHeaderTV.setText(" ");
@@ -214,6 +213,8 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
         // Handle navigation view item clicks here.
         switch(item.getItemId()){
             case R.id.nav_home:
@@ -244,6 +245,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_favorite:
                 // add auth condition
                 if(mUser == null) {
+                    Toast.makeText(getApplicationContext(), "Sign in first", Toast.LENGTH_SHORT)
+                            .show();
                     // Not signed in, click redirect to sign in page
                     Intent favoriteIntent = new Intent(this, SigninActivity.class);
                     startActivity(favoriteIntent);
