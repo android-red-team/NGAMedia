@@ -105,12 +105,15 @@
     <string name="search">Search</string>
     <string name="title_activity_login">Sign in</string>
 
-    <!-- Strings related to login -->
+    <!-- Strings related to sign in/up, and reset password -->
     <string name="prompt_username">Username</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in</string>
-    <string name="action_sign_up">Sign up</string>
+    <string name="action_sign_in">SIGN IN</string>
+    <string name="action_sign_up">SIGN UP</string>
+    <string name="action_reset_password">RESET PASSWORD</string>
+    <string name="title_reset_password">Forget password?</string>
+    <string name="text_reset_password">We will send your request to your register Email address.</string>
     <string name="error_email">This email address is not signed up, please register first.</string>
     <string name="error_password">Password is incorrect, please check again.</string>
     <string name="error_invalid_username">This username is invalid</string>

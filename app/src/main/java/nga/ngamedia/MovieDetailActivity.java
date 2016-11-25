@@ -5,7 +5,6 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +12,6 @@ import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,7 +33,9 @@ public class MovieDetailActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
 
-    private FloatingActionButton mFloatActionBtn;
+    /**
+     *  Declare the UI
+     */
     private Movie mMovie;
     ImageView backdrop;
     ImageView poster;
@@ -71,7 +71,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         voteAverage = (TextView) findViewById(R.id.vote_average);
         releaseDate = (TextView) findViewById(R.id.release_date);
         popularity = (TextView) findViewById(R.id.popularity);
-        mFloatActionBtn = (FloatingActionButton) findViewById(R.id.fab);
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         String url = "http://image.tmdb.org/t/p/w500";
@@ -101,23 +100,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         } else {
             releaseDate.setText("First Airing Date: " + mMovie.getFirst_air_date());
         }
-
-        // Floating add button
-        mFloatActionBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(mUser == null){
-                    Intent intent = new Intent(getApplicationContext(), SigninActivity.class);
-                    startActivityForResult(intent, 0);
-                    finish();
-                }else {
-                    //addFavorite(mMovie, mUser.getUid());
-                    mDB = FirebaseDatabase.getInstance().getReference();
-                    mDB.child(mUser.getUid()).push().setValue(mMovie);
-                    Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
 
     @Override
@@ -162,6 +144,19 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+
+        if (id == R.id.menu_item_fav) {
+            if(mUser == null){
+                Intent intent = new Intent(getApplicationContext(), SigninActivity.class);
+                startActivityForResult(intent, 0);
+                finish();
+            }else {
+                mDB = FirebaseDatabase.getInstance().getReference();
+                mDB.child(mUser.getUid()).push().setValue(mMovie);
+                Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
+            }
             return true;
         }
 

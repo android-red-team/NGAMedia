@@ -8,4 +8,10 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="logo_sign">150dp</dimen>
+    <dimen name="font_header1_size">36sp</dimen>
+    <dimen name="font_header2_size">32sp</dimen>
+    <dimen name="font_header3_size">28sp</dimen>
+    <dimen name="font_header4_size">24sp</dimen>
+    <dimen name="font_text_size">20sp</dimen>
 </resources>

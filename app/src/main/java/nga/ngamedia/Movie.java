@@ -86,7 +86,7 @@ public class Movie implements Parcelable {
     }
 
     public String getBackdrop() {
-        return "http://image.tmdb.org/t/p/w500"  + backdrop;
+        return backdrop;
     }
 
     public void setBackdrop(String backdrop) {

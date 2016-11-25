@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -49,9 +50,9 @@ public class MainActivity extends AppCompatActivity
     private MoviesAdapter mTVShowAdapter;
 
     // Firebase auth
-    private FirebaseUser mUser;
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseUser mUser;
+
     // The BroadcastReceiver that tracks network connectivity changes.
     private NetworkReceiver networkReceiver = new NetworkReceiver();
     private Snackbar networkNotificationSnackBar;
@@ -61,8 +62,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
         mainActivityInstance = this;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -107,13 +106,13 @@ public class MainActivity extends AppCompatActivity
 
         // Initialize UI resources to be updated
         TextView popularMovieHeaderTV = (TextView) findViewById(R.id.popularMovieHeader);
-        String popular_movies_header = getString(R.string.popular_movies_header);
+        //String popular_movies_header = getString(R.string.popular_movies_header);
 
         TextView upcomingMovieHeaderTV = (TextView) findViewById(R.id.upcomingMoviesHeader);
-        String upcoming_movies_header = getString(R.string.upcoming_movies_header);
+        //String upcoming_movies_header = getString(R.string.upcoming_movies_header);
 
         TextView popularTVHeader = (TextView) findViewById(R.id.popularTVHeader);
-        String popular_tv_shows_header = getString(R.string.popular_tv_shows_header);
+        //String popular_tv_shows_header = getString(R.string.popular_tv_shows_header);
 
         popularMovieHeaderTV.setText(" ");
         upcomingMovieHeaderTV.setText(" ");
@@ -134,13 +133,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed()
+     {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             //super.onBackPressed();
-            new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setTitle("Quit Application")
+            new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Quit Application")
                     .setMessage("Are you sure you want to close NGAMedia app?")
                     .setIcon(R.drawable.alert_icon)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -173,6 +174,11 @@ public class MainActivity extends AppCompatActivity
 
      */
 
+    /**
+     * Set the top toolbar
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -207,6 +213,8 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
         // Handle navigation view item clicks here.
         switch(item.getItemId()){
             case R.id.nav_home:
@@ -237,6 +245,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_favorite:
                 // add auth condition
                 if(mUser == null) {
+                    Toast.makeText(getApplicationContext(), "Sign in first", Toast.LENGTH_SHORT)
+                            .show();
                     // Not signed in, click redirect to sign in page
                     Intent favoriteIntent = new Intent(this, SigninActivity.class);
                     startActivity(favoriteIntent);

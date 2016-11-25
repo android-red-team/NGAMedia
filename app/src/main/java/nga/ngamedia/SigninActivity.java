@@ -63,15 +63,15 @@ public class SigninActivity extends AppCompatActivity {
                 attemptSignin();
             }
         });
-        /*mForgetView.setOnClickListener(new View.OnClickListener(){
+        mForgetView.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
                 // Start SignupActivity
-                Intent intent = new Intent(getApplicationContext(), ForgetActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ResetPasswordActivity.class);
                 startActivity(intent);
             }
-        });*/
+        });
 
         mSignupView.setOnClickListener(new View.OnClickListener(){
 
@@ -167,23 +167,22 @@ public class SigninActivity extends AppCompatActivity {
 
     private void userSignin(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(SigninActivity.this,
-                                    "Sign in failed, please try again...",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            Toast.makeText(SigninActivity.this,
-                                    "Welcome to your movie world!",
-                                    Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-                        }
-                });
+             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                 @Override
+                 public void onComplete(@NonNull Task<AuthResult> task) {
+                     if (!task.isSuccessful()) {
+                         Toast.makeText(SigninActivity.this,
+                                        "Sign in failed, please try again...",
+                                        Toast.LENGTH_SHORT).show();
+                     }
+                     else {
+                         Toast.makeText(SigninActivity.this,
+                                        "Welcome to your movie world!",
+                                        Toast.LENGTH_SHORT).show();
+                         finish();
+                     }
+                 }
+             });
 
     }
 

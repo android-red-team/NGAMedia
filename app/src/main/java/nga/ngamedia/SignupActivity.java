@@ -28,13 +28,6 @@ import com.google.firebase.auth.FirebaseAuth;
 public class SignupActivity extends AppCompatActivity {
 
     private static final String TAG = "SignupActivity.java";
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
 
     // UI references.
     private EditText mUsernameView;
@@ -47,7 +40,6 @@ public class SignupActivity extends AppCompatActivity {
 
     // Firebase
     private FirebaseAuth mAuth;
-    //private DatabaseReference mDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,18 +51,16 @@ public class SignupActivity extends AppCompatActivity {
         mEmailView         = (EditText) findViewById(R.id.email);
         mPasswordView      = (EditText) findViewById(R.id.password);
         mEmailSignUpButton = (Button) findViewById(R.id.email_sign_up_button);
-        mSignInView        = (TextView)findViewById(R.id.signup_text);
+        mSignInView        = (TextView)findViewById(R.id.signin_text);
         mSignupFormView    = findViewById(R.id.signup_form);
         mProgressView      = findViewById(R.id.signup_progress);
 
         // Set up the Firebase
         mAuth = FirebaseAuth.getInstance();
-        //mDB   = FirebaseDatabase.getInstance().getReference();
 
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-
                 return false;
             }
         });
@@ -85,8 +75,7 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
-        /*mSignInView.setOnClickListener(new View.OnClickListener(){
-
+        mSignInView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 // Start SigninActivity
@@ -94,7 +83,7 @@ public class SignupActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        });*/
+        });
     }
 
     /**
@@ -219,24 +208,25 @@ public class SignupActivity extends AppCompatActivity {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-
     private void userSignUp(String email, String password){
+        mAuth.createUserWithEmailAndPassword(email, password)
+             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
 
-            mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-
-                            if (!task.isSuccessful()) {
-                                Toast.makeText(SignupActivity.this,
+                 @Override
+                 public void onComplete(@NonNull Task<AuthResult> task) {
+                     if (!task.isSuccessful()) {
+                         Toast.makeText(SignupActivity.this,
                                         "Sign up failed, please try again...",
                                         Toast.LENGTH_SHORT).show();
-                            }
-                            Toast.makeText(SignupActivity.this,
-                                    "Welcome to your movie world!",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                     }
+                     else{
+                         Toast.makeText(SignupActivity.this,
+                                        "Welcome to your movie world!",
+                                        Toast.LENGTH_SHORT).show();
+                         finish();
+                     }
+                 }
+             });
     }
 }
 
