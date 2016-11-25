@@ -67,7 +67,7 @@ public class SigninActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                // Start SignupActivity
+                // Start ResetPasswordActivity
                 Intent intent = new Intent(getApplicationContext(), ResetPasswordActivity.class);
                 startActivity(intent);
             }
@@ -174,6 +174,7 @@ public class SigninActivity extends AppCompatActivity {
                          Toast.makeText(SigninActivity.this,
                                         "Sign in failed, please try again...",
                                         Toast.LENGTH_SHORT).show();
+                         showProgress(false);
                      }
                      else {
                          Toast.makeText(SigninActivity.this,

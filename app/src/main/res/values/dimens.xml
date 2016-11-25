@@ -13,5 +13,7 @@
     <dimen name="font_header2_size">32sp</dimen>
     <dimen name="font_header3_size">28sp</dimen>
     <dimen name="font_header4_size">24sp</dimen>
-    <dimen name="font_text_size">20sp</dimen>
+    <dimen name="font_text1_size">20sp</dimen>
+    <dimen name="font_text2_size">18sp</dimen>
+    <dimen name="font_text3_size">16sp</dimen>
 </resources>
