@@ -2,6 +2,7 @@ package nga.ngamedia;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -89,7 +90,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 .load(url + mMovie.getPoster())
                 .into(poster);
         Picasso.with(this)
-                .load(mMovie.getBackdrop())
+                .load(url + mMovie.getBackdrop())
                 .into(backdrop);
         int ave = (int) Double.parseDouble(mMovie.getVoteAverage());
         voteAverage.setText("" + ave + " /10 "+" (out of " + mMovie.getVote_count() + " votes)");
@@ -100,6 +101,20 @@ public class MovieDetailActivity extends AppCompatActivity {
         } else {
             releaseDate.setText("First Airing Date: " + mMovie.getFirst_air_date());
         }
+
+        // Change fonts of TextView/s
+        Typeface arvoBold = Typeface.createFromAsset(getAssets(),
+                "fonts/Arvo-Bold.ttf");
+        Typeface montserratBold = Typeface.createFromAsset(getAssets(),
+                "fonts/Montserrat-Bold.ttf");
+        Typeface libreBaskervilleRegular = Typeface.createFromAsset(getAssets(),
+                "fonts/LibreBaskerville-Regular.ttf");
+
+        title.setTypeface(arvoBold);
+        description.setTypeface(libreBaskervilleRegular);
+        popularity.setTypeface(montserratBold);
+        voteAverage.setTypeface(montserratBold);
+        releaseDate.setTypeface(montserratBold);
     }
 
     @Override
