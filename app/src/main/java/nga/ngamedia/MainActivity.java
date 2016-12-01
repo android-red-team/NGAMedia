@@ -219,7 +219,6 @@ public class MainActivity extends AppCompatActivity
         switch(item.getItemId()){
             case R.id.nav_home:
                 Intent homeActivityIntent = new Intent(this, MainActivity.class);
-                homeActivityIntent.putExtra("EXTRA_CLASS","Movie");
                 finish();
                 startActivity(homeActivityIntent);
                 break;
@@ -245,7 +244,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_favorite:
                 // add auth condition
                 if(mUser == null) {
-                    Toast.makeText(getApplicationContext(), "Sign in first", Toast.LENGTH_SHORT)
+                    Toast.makeText(getApplicationContext(), "Please Sign-in first", Toast.LENGTH_SHORT)
                             .show();
                     // Not signed in, click redirect to sign in page
                     Intent favoriteIntent = new Intent(this, SigninActivity.class);

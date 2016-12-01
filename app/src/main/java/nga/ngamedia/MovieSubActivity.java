@@ -3,8 +3,6 @@ package nga.ngamedia;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -106,27 +104,6 @@ public class MovieSubActivity extends AppCompatActivity
             } else if (myIntent.getStringExtra("EXTRA_CLASS").equals("Favorite")){
                 getMedia(8, null);
             }
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        // Registers BroadcastReceiver to track network connection changes.
-        IntentFilter networkStatusFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        networkReceiver = new NetworkReceiver();
-        this.registerReceiver(networkReceiver, networkStatusFilter);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        // Unregisters BroadcastReceiver when app is paused.
-        if (networkReceiver != null) {
-            this.unregisterReceiver(networkReceiver);
-        }
-        if(networkNotificationSnackBar != null && networkNotificationSnackBar.isShown()) {
-            networkNotificationSnackBar.dismiss();
         }
     }
 
@@ -416,16 +393,18 @@ public class MovieSubActivity extends AppCompatActivity
             Movie movie = mMovieList.get(position);
             String url = "http://image.tmdb.org/t/p/w500";
 
-            if(movie.getPoster().length() > 5) {
-                Picasso.with(mContext)
-                        .load(url + movie.getPoster())
-                        .placeholder(R.color.colorAccent)
-                        .into(holder.imageView);
-            } else {
-                Picasso.with(mContext)
-                        .load("https://thumbs.gfycat.com/UnfoldedEmotionalEquine-size_restricted.gif")
-                        .placeholder(R.color.colorAccent)
-                        .into(holder.imageView);
+            if(movie.getPoster() != null) {
+                if(movie.getPoster().length() > 5) {
+                    Picasso.with(mContext)
+                            .load(url + movie.getPoster())
+                            .placeholder(R.color.colorAccent)
+                            .into(holder.imageView);
+                } else {
+                    Picasso.with(mContext)
+                            .load("https://thumbs.gfycat.com/UnfoldedEmotionalEquine-size_restricted.gif")
+                            .placeholder(R.color.colorAccent)
+                            .into(holder.imageView);
+                }
             }
         }
 
