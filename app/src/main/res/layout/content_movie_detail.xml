@@ -31,7 +31,7 @@
                     android:layout_width="30dp"
                     android:layout_height="34dp"
                     android:layout_marginLeft="@dimen/activity_vertical_margin"
-                    android:src="@drawable/rating_icon"/>
+                    android:src="@drawable/star_icon"/>
                 <TextView
                     android:id="@+id/vote_average"
                     android:layout_width="263dp"
@@ -47,7 +47,7 @@
             android:layout_width="30dp"
             android:layout_height="34dp"
             android:layout_marginLeft="@dimen/activity_vertical_margin"
-            android:src="@drawable/popularity2_icon"/>
+            android:src="@drawable/award_icon"/>
         <TextView
             android:id="@+id/popularity"
             android:layout_width="match_parent"
@@ -63,7 +63,7 @@
             android:layout_width="30dp"
             android:layout_height="34dp"
             android:layout_marginLeft="@dimen/activity_vertical_margin"
-            android:src="@drawable/release_icon"/>
+            android:src="@drawable/calendar_icon"/>
         <TextView
             android:id="@+id/release_date"
             android:layout_width="match_parent"
