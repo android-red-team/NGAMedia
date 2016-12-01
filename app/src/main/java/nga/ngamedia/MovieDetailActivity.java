@@ -1,9 +1,7 @@
 package nga.ngamedia;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Typeface;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
@@ -63,7 +61,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        toolbarLayout.setTitle(mMovie.getTitle());
+        toolbarLayout.setTitle(" ");
 
         backdrop = (ImageView) findViewById(R.id.backdrop);
         title = (TextView) findViewById(R.id.movie_title);
@@ -78,13 +76,8 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         // Movies contain a 'title' while TVShows contain a 'name'
         // Movies contain 'release_date' while TVShows contain 'first_air_date'
-        if(mMovie.getTitle() != null) {
-            setTitle(mMovie.getTitle());
-            title.setText(mMovie.getTitle());
-        } else {
-            setTitle(mMovie.getName());
-            title.setText(mMovie.getName());
-        }
+        String mediaTitleString = (mMovie.getTitle() != null) ? mMovie.getTitle() : mMovie.getName();
+        title.setText(mediaTitleString);
         description.setText(mMovie.getDescription());
         Picasso.with(this)
                 .load(url + mMovie.getPoster())
@@ -96,11 +89,8 @@ public class MovieDetailActivity extends AppCompatActivity {
         voteAverage.setText("" + ave + " /10 "+" (out of " + mMovie.getVote_count() + " votes)");
         int pop = (int) Double.parseDouble(mMovie.getPopularity());
         popularity.setText("" + pop + " Popularity Rating");
-        if(mMovie.getRelease_date() != null) {
-            releaseDate.setText("" + mMovie.getRelease_date());
-        } else {
-            releaseDate.setText("First Airing Date: " + mMovie.getFirst_air_date());
-        }
+        String releaseDateString = (mMovie.getRelease_date() != null) ? "Release Date: " + mMovie.getRelease_date() :"First Airing Date: " + mMovie.getFirst_air_date();
+        releaseDate.setText(releaseDateString);
 
         // Change fonts of TextView/s
         Typeface arvoBold = Typeface.createFromAsset(getAssets(),
@@ -115,27 +105,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         popularity.setTypeface(montserratBold);
         voteAverage.setTypeface(montserratBold);
         releaseDate.setTypeface(montserratBold);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        // Registers BroadcastReceiver to track network connection changes.
-        IntentFilter networkStatusFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        networkReceiver = new NetworkReceiver();
-        this.registerReceiver(networkReceiver, networkStatusFilter);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        // Unregisters BroadcastReceiver when app is paused.
-        if (networkReceiver != null) {
-            this.unregisterReceiver(networkReceiver);
-        }
-        if(networkNotificationSnackBar != null && networkNotificationSnackBar.isShown()) {
-            networkNotificationSnackBar.dismiss();
-        }
     }
 
     @Override
@@ -170,7 +139,8 @@ public class MovieDetailActivity extends AppCompatActivity {
             }else {
                 mDB = FirebaseDatabase.getInstance().getReference();
                 mDB.child(mUser.getUid()).push().setValue(mMovie);
-                Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
+                String mediaAddedString = (mMovie.getTitle() != null) ? "Added movie " + mMovie.getTitle() : "Added tv show " + mMovie.getName();
+                Toast.makeText(getApplicationContext(), mediaAddedString, Toast.LENGTH_SHORT).show();
             }
             return true;
         }
@@ -187,7 +157,8 @@ public class MovieDetailActivity extends AppCompatActivity {
     // Call to set up the intent to share
     private void setSendIntent(Intent sendIntent) {
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "I found " + mMovie.getTitle() + " using the NGAMedia App!" );
+        String mediaToShareString = (mMovie.getTitle() != null) ? mMovie.getTitle() : mMovie.getName();
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "I found " + mediaToShareString + " using the NGAMedia App!" );
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
     }
