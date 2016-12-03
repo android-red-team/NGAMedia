@@ -151,6 +151,8 @@ public class MovieSubActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
         // Handle navigation view item clicks here.
         switch(item.getItemId()){
             case R.id.nav_home:
