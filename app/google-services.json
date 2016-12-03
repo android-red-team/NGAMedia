@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "396589361503",
+    "firebase_url": "https://ngamedia-3ac0b.firebaseio.com",
+    "project_id": "ngamedia-3ac0b",
+    "storage_bucket": "ngamedia-3ac0b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:396589361503:android:c4fb012e7c0cc693",
+        "android_client_info": {
+          "package_name": "nga.ngamedia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "396589361503-kohmiel5h0p5tsce90vuph4eo89g8d94.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRrFrtzs3ck-brbkJEUMKt49UhYIoFhgM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
